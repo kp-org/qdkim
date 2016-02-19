@@ -1,0 +1,8 @@
+20160218: qmail-vdkim-0.42-beta
+          - added variable XDKIM
+          - created man page qmail-vdkim.8
+20160211: qmail-sdkim-0.44
+          - added variable XDKIM
+20160210: qmail-sdkim-0.43
+          - added PARENTLEVEL for third and fourth level domains
+
