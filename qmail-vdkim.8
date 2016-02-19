@@ -1,0 +1,63 @@
+.TH qmail-vdkim 8 "" openqmail
+.SH NAME
+qmail-vdkim \- verify DKIM signatures
+.SH SYNOPSIS
+.B qmail-vdkim
+.SH DESCRIPTION
+.B qmail-vdkim
+have to plugin into the 
+.IR qmail-smtpd\->qmail-queue 
+pipeline. There are several options to do this. One is to rename the original binary
+.B qmail-queue
+and make a symbolic link
+.IR qmail-vdkim
+\--> 
+.IR qmail-queue.
+Then 
+.B qmail-vdkim
+have to call the original (renamed) qmail-queue binary. A smarter option is to set the
+.IR QMAILQUEUE
+environment variable.
+.P
+.B qmail-vdkim
+checks the incoming message for a DKIM signature. On success it adds the 
+.IR X-Authentication-Result
+header. Thus the maessage have to be accepted by
+.B qmail-smtpd
+before
+.B qmail-vdkim
+will be invoked.
+.SH ENVIRONMENT VARIABLES
+.B qmail-vdkim 
+uses several variables, which can be set in the environment too.
+.TP 3
+.IR $XDKIM
+This variable is set to
+.B xdkim
+by default. It have to contain the tool which does the real verification. An alternative is
+.B libdkimtest.
+.TP 3
+.IR $DKVRFY
+This have to be set to 1 (default) to enable verification. Any other value disables verification.
+.TP 3
+.IR $DKQUEUE
+This have to contain the name of the real
+.B qmail-queue
+binary together with the full path if necessary. By default it is assumed that
+.B qmail-vdkim 
+and
+.B qmail-queue
+are in the same folder, so the most common value is usually
+.IR $QMAILHOME/bin/qmail-queue.
+.SH DEPENDENCIES
+.B qmail-vdkim
+requires
+.B xdkim
+and 
+.B dos2unix.
+.SH "AUTHOR"
+Kai Peter (©2014), kp@openqmail.org
+.SH "SEE ALSO"
+qmail-xdkim(8),
+mkdomainkey(8),
+qmail-sdkim(8)

@@ -1,0 +1,28 @@
+.TH mkdomainkey 8 "" openqmail
+.SH NAME
+mkdomainkey \- create domainkeys and show DNS TXT records for bind
+.SH SYNOPSIS
+.B mkdomainkey [-h] [-p] [-s <selector>] domain
+.SH DESCRIPTION
+.B mkdomainkey
+reads a domainname from standard input and creates domainkeys for this domain. Default
+location for domainkeys is 
+.IR /etc/domainkeys.
+.SH OPTIONS
+.TP
+.B -p
+print the related DNS TXT record for the domain
+.TP
+.B "-s <selector>"
+define a selector instead of "default"
+.TP
+.B -h 
+prints help and exits
+.SH DEPENDENCIES
+.B mkdomainkeys
+requires a recent version (recommanded > 1.0.1f) of
+.B openssl.
+.SH "SEE ALSO"
+qmail-xdkim(8),
+qmail-sdkim(8),
+qmail-vdkim(8)

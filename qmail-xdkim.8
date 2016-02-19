@@ -1,0 +1,36 @@
+.TH qmail-xdkim 8 "" openqmail
+.SH "NAME"
+.B qmail-xdkim 
+\- three programs to use DKIM with eQmail, openqmail or qmail derivatives
+.SH "DESCRIPTION"
+The
+.B qmail-xdkim
+package is a composed of three programs (shell scripts):
+.P
+.IB mkdomainkey 
+ \ create domainkeys and show the related DNS TXT records 
+for bind
+.P
+.IB qmail-sdkim
+ \ insert DKIM signatures to outgoing mails
+.P
+.IB qmail-vdkim
+ \ verify DKIM headers and add the result header
+.P
+.SH DEPENDENCIES
+.B qmail-xdkim
+requires 
+.B xdkim
+by default. or any other 
+.B libdkimtest
+compliant tool. All path definitions are pointing to the most 
+common defaults of 
+.B libdkim.
+.SH AUTHORS
+.B qmail-xdkim
+was created by Kai Peter, based on work by Kyle Wheeler and Joerg
+Backschues.
+.SH "SEE ALSO"
+qmail-sdkim(8),
+qmail-vdkim(8),
+mkdomainkey(8)
