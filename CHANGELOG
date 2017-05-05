@@ -1,3 +1,4 @@
+20170219: created git repo
 20160218: qmail-vdkim-0.42-beta
           - added variable XDKIM
           - created man page qmail-vdkim.8

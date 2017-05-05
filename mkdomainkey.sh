@@ -1,5 +1,3 @@
-#!/bin/sh
-# WARNING: This file was auto-generated. Do not edit!
 #********************************************************************************
 # Create/Handle domainkeys for openqmail/eQmail/(net)qmail and derivatives      #
 #                                                                               #
@@ -11,7 +9,7 @@
 #                                                                               #
 # Description: Creation of domain keys and DNS TXT records for bind             #
 #********************************************************************************
-DKDIR="/usr/local/qmail/etc/dkimkeys"
+DKDIR="QMAILHOME/etc/dkimkeys"
 
 function showHelp {
   echo "Usage:  $(basename $0) [-h] [-p] [-s] domain"

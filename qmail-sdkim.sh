@@ -26,8 +26,8 @@ function DoSend() { exec "$DKREMOTE" "$@"; }
 #NODKSIGN=1		# for debugging
 if [ "$NODKSIGN" ] ; then DoSend "$@" ; fi
 
-[ $LOGGER ] || LOGGER="/usr/local/qmail/bin/splogger"
-[ $DKDIR ] || $DKDIR="/usr/local/qmail/etc/dkimkeys/%/default"
+[ $LOGGER ] || LOGGER="QMAILHOME/bin/splogger"
+[ $DKDIR ] || $DKDIR="QMAILHOME/etc/dkimkeys/%/default"
 # basically $DKSIGN is the dir with the domainkeys
 [ "$DKSIGN" ] || DKSIGN="$DKDIR"
 

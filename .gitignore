@@ -5,3 +5,8 @@ TODO
 conf-man
 conf-qmail
 sdkim.conf
+FILES
+*.bck
+qmail-sdkim
+qmail-vdkim
+mkdomainkey
