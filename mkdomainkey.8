@@ -1,6 +1,6 @@
 .TH mkdomainkey 8 "" openqmail
 .SH NAME
-mkdomainkey \- create domainkeys and show DNS TXT records for bind
+mkdomainkey \- create a domainkey and show DNS TXT records for bind
 .SH SYNOPSIS
 .B mkdomainkey [-h] [-p] [-s <selector>] domain
 .SH DESCRIPTION
@@ -11,7 +11,7 @@ location for domainkeys is
 .SH OPTIONS
 .TP
 .B -p
-print the related DNS TXT record for the domain
+print the related DNS TXT record for the domain (default)
 .TP
 .B "-s <selector>"
 define a selector instead of "default"
