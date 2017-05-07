@@ -2,11 +2,12 @@ obsolete
 pkg-dev
 README
 TODO
-conf-man
 conf-qmail
-sdkim.conf
 FILES
 *.bck
 qmail-sdkim
 qmail-vdkim
 mkdomainkey
+mkchangelog
+CHANGELOG.old
+qdkim.conf
