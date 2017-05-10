@@ -1,22 +1,21 @@
-# Makefile for qmail-xdkim
+# Makefile for qmail-dkim
 
-
-SRC = clean mkdomainkey qmail-sdkim qmail-vdkim conf
+SRC = clean mkdkimkey qmail-sdkim qmail-vdkim conf
 
 default: $(SRC)
 	@echo Done!
 
 clean:
 	@echo -n Cleaning up ...
-	@rm -f $(SRC)
+	@rm -f $(SRC) *.8
 	@echo " done!"
 
 setup:
 	./install
 
-mkdomainkey:
+mkdkimkey:
 	@echo creating $@
-	@cat warn-auto.sh mkdomainkey.sh \
+	@cat warn-auto.sh $@.sh \
 	| sed s}QMAILHOME}"`head -1 conf-home`"}g \
 	> $@
 	@chmod 755 $@
@@ -42,3 +41,11 @@ conf:
 	| sed s}QMAILHOME}"`head -1 conf-home`"}g \
 	> qdkim.conf
 	@chmod 644 qdkim.conf
+
+man: mkdkimkey.8
+#	@chmod 644 *.8
+
+mkdkimkey.8:
+	cat mkdkimkey.man \
+	| sed s}QMAILHOME}"`head -1 conf-home`"}g \
+	> mkdkimkey.8
