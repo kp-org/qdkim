@@ -16,8 +16,7 @@ setup:
 mkdkimkey:
 	@echo creating $@
 	@cat warn-auto.sh $@.sh \
-	| sed s}QMAILHOME}"`head -1 conf-home`"}g \
-	> $@
+	| sed s}QMAILHOME}"`head -1 conf-home`"}g > $@
 	@chmod 755 $@
 #        | sed s}UID}"`head -2 conf-users | tail -1`"}g \
 #        | sed s}GID}"`head -1 conf-groups`"}g \
@@ -42,10 +41,11 @@ conf:
 	> qdkim.conf
 	@chmod 644 qdkim.conf
 
-man: mkdkimkey.8
+man: mkdkimkey.8 qmail-sdkim.8
 #	@chmod 644 *.8
 
 mkdkimkey.8:
-	cat mkdkimkey.man \
-	| sed s}QMAILHOME}"`head -1 conf-home`"}g \
-	> mkdkimkey.8
+	cat mkdkimkey.man | sed s}QMAILHOME}"`head -1 conf-home`"}g > mkdkimkey.8
+
+qmail-sdkim.8:
+	cat qmail-sdkim.man | sed s}QMAILHOME}"`head -1 conf-home`"}g > qmail-sdkim.8
