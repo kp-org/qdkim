@@ -13,3 +13,4 @@ qdkim.conf
 libqdkim
 mkchangelog
 CHANGELOG.old
+message
