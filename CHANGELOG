@@ -1,3 +1,30 @@
+commit 2997c025177f496e16448ce09bd727a1660aecd6
+Merge: e7b3213 c3a5226
+Author: Kai Peter <kp@openqmail.org>
+Date:   Thu May 11 16:00:06 2017 +0200
+
+    Merge pull request #2 from kp-org/dev
+    
+    merge of 'qdkim' into 'xdkim'
+
+commit c3a5226ce8edcebfcc17481fb3be2a451f3fa061
+Author: Kai Peter <kp@openqmail.org>
+Date:   Thu May 11 15:55:16 2017 +0200
+
+    clean-up, docs
+
+commit ab48b27dcacb3ed370b556536915ff6b4220a07b
+Author: Kai Peter <kp@openqmail.org>
+Date:   Thu May 11 15:50:30 2017 +0200
+
+    added libqdkim code
+
+commit e47d1b44a28aa3f9bd009e23c832ab5613e25635
+Author: Kai Peter <kp@openqmail.org>
+Date:   Thu May 11 15:49:03 2017 +0200
+
+    added config file
+
 commit b49457386bfbfad3317968026e70697bff326fc6
 Author: Kai Peter <kp@openqmail.org>
 Date:   Wed May 10 10:19:25 2017 +0200
@@ -27,6 +54,15 @@ Author: Kai Peter <kp@openqmail.org>
 Date:   Fri May 5 11:07:02 2017 +0200
 
     typo in mkdomainkey.8
+
+commit e7b3213cac84b9a3be220680b2bf9878e98cd3a1
+Merge: 939df0d 4cac84d
+Author: Kai Peter <kp@openqmail.org>
+Date:   Fri Feb 19 11:47:42 2016 +0100
+
+    Merge pull request #1 from kp-org/dev
+    
+    first merge to master
 
 commit 4cac84d5267b25b23d6021274e3f4273fd69a2ea
 Author: Kai Peter <kp@openqmail.org>

@@ -1,8 +1,8 @@
 # Makefile for qdkim
 #
-VERSION=
+VERSION=libqdkim-1.0.22
 CFLAGS =-c -DVERSION=\"${VERSION}\"
-LFLAGS =
+LFLAGS =-lresolv
 LIBS   =-lcrypto
 #INCL	=  -I /usr/include/openssl/
 

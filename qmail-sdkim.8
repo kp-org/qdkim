@@ -1,0 +1,39 @@
+.TH qmail-sdkim 8 "" openqmail
+.SH NAME
+qmail-sdkim \- insert DKIM signatures into outgoing messages
+.SH SYNOPSIS
+.B qmail-sdkim\fI $@ \fR
+.SH DESCRIPTION
+\fBqmail-sdkim\fR have to plugin into the \fIqmail-rspawn\fR\->\fIqmail-remote\fR
+pipeline. After a message have been signed it have to be handed over to 
+\fBqmail-remote\fR immediately.
+.P
+To sign a message a \fIdomainkey\fR for the senders domain in \fI/usr/local/qmail/etc/dkimkeys/\fR 
+have to exists. This can be done with \fBmkdkimkey\fR(8).
+.SH CONFIGURATION
+\fBqmail-sdkim\fR reads several options from \fI/usr/local/qmail/etc/qdkim.conf\fR.
+.TP 3
+.IR DOSIGN
+Switch DKIM signing ON or OFF (default: disabled). This have to be set to \fIDKSIGN=1\fR in
+\fI/usr/local/qmail/etc/qdkim.conf\fR explizit to enable signing.
+.TP 3
+.IR DKLIB
+Name of the DKIM library to use (default: \fBlibqdkim\fR). An alternative is \fBlibdkimtest\fR.
+.TP 3
+.IR QMAILREMOTE
+Contains the name of the real \fBqmail-remote\fR (binary) if necessary.
+.TP 3
+.IR DKSIGN
+The location where the keys will be stored. Beware of the \fI%\fR sign (DEFAULT:
+\fI/usr/local/qmail/etc/dkimkeys/%/default\fR).
+
+
+.SH CAVEATS
+ \- \fBqmail-sdkim\fR doesn't support IDN's.
+ \- The signing options for DKIM are not configurable through a config file.
+.SH VERSION
+This manual page describes \fBqmail-sdkim\fR version 0.56 or higher.
+.SH "AUTHOR"
+Kai Peter (©2014),(©2017), kp@openqmail.org
+.SH "SEE ALSO"
+mkdkimkey(8),qmail-vdkim(8),qdkim.conf(5)

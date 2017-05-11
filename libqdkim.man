@@ -1,15 +1,14 @@
 .TH libqdkim 8 "" openqmail
 .SH NAME
-xdkim \- handles DKIM signatures from stdin
+libqdkim \- handles DKIM signatures from stdin
 .SH SYNOPSIS
-.B xdkim
-.I options [tags] <infile> [<privkeyfile> <outfile>]
+\fBlibqdkim\fR \fIoptions [tags] <infile> [<privkeyfile> <outfile>]\fR
 
 \fIoptions\fR is a series of getopt-style options to handle the behavior of
-\fBxdkim\fR. \fItags\fR is a series like \fIoptions\fR to specify values of
+\fBlibqdkim\fR. \fItags\fR is a series like \fIoptions\fR to specify values of
 tags of a signature.
 .SH DESCRIPTION
-\fBxdkim\fR creates DKIM signatures and add them to email headers or verifies
+\fBlibqdkim\fR creates DKIM signatures and add them to email headers or verifies
 DKIM signatures. Line endings have to be \fBCRLF\fR for verification.
 .SH OPTIONS
 .TP
@@ -64,17 +63,17 @@ a numeric value to set the rsa key type (1=sha1, 2=sha256, 3=both)
 -y<\fIselector\fR>
 the selector tag (DEFAULT=default)
 .SH EXAMPLES
-To sign a message and assuming your domainkeys are in \fI/etc/domainkeys\fR do:
+To sign a message and assuming your domainkeys are in \fIQMAILHOME/etc/dkimkeys\fR do:
 .EX
-    xdkim -ydefault -d"example.com" -i"me@example.com" -l -b2 -cr -z2 \\
-          -s "$InMsg" /etc/domainkeys/example.org/default "$OutMsg" 2>/dev/null
+    libqdkim -ydefault -d"example.com" -i"me@example.com" -l -b2 -ct -z2 \\
+             -s "$InMsg" QMAILHOME/etc/dkimkeys/example.org/default "$OutMsg" 2>/dev/null
 .EE
 
 To verify a message, where message is a DKIM signed email:
 
 .EX
-    xdkim -v <message>
+    libqdkim -v <message>
 .EE
 
 .SH "SEE ALSO"
-qmail-dkim(8), qmail-sdkim(8), qmail-vdkim(8)
+qmail-sdkim(8), qmail-vdkim(8)
