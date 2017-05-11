@@ -1,8 +1,9 @@
 obsolete
 README
 TODO
-conf-qmail
 FILES
+*.o
+*.a
 *.bck
 *.tmp
 *.bck.*

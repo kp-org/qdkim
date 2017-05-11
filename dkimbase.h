@@ -25,7 +25,7 @@
 #include <openssl/pem.h>
 #include <openssl/err.h>
 
-#define BUFFER_ALLOC_INCREMENT	256
+#define BUFFER_ALLOC_INCREMENT 256
 
 #include <string>
 #include <list>

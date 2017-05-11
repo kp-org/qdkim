@@ -28,25 +28,25 @@
 #ifdef VERSION
 #define VERSION_STRING VERSION
 #else
-#define VERSION_STRING "1.0.21"
+#define VERSION_STRING "1.0.22"
 #endif
 
 static void InitContext( DKIMContext* pContext, bool bSign, void* pObject )
 {
-	pContext->reserved1 = DKIMID;
-	pContext->reserved2 = bSign ? 1 : 0;
-	pContext->reserved3 = pObject;
+  pContext->reserved1 = DKIMID;
+  pContext->reserved2 = bSign ? 1 : 0;
+  pContext->reserved3 = pObject;
 }
 
 static void* ValidateContext( DKIMContext* pContext, bool bSign )
 {
-	if( pContext->reserved1 != DKIMID )
-		return NULL;
+  if( pContext->reserved1 != DKIMID )
+    return NULL;
 
-	if( pContext->reserved2 != (unsigned int)(bSign ? 1 : 0) )
-		return NULL;
+  if( pContext->reserved2 != (unsigned int)(bSign ? 1 : 0) )
+    return NULL;
 
-	return pContext->reserved3;
+  return pContext->reserved3;
 }
 
 int DKIM_CALL DKIMSignInit( DKIMContext* pSignContext, DKIMSignOptions* pOptions )
@@ -98,15 +98,10 @@ int DKIM_CALL DKIMSignGetSig( DKIMContext* pSignContext, char* szPrivKey, char* 
 */
 int DKIM_CALL DKIMSignGetSig2( DKIMContext* pSignContext, char* szPrivKey, char** pszSignature )
 {
-	CDKIMSign* pSign = (CDKIMSign*)ValidateContext( pSignContext, true );
+  CDKIMSign* pSign = (CDKIMSign*)ValidateContext( pSignContext, true );
 
-	if( pSign )
-	{
-		return pSign->GetSig2( szPrivKey, pszSignature );
-	}
-	
-	return DKIM_INVALID_CONTEXT;
-
+  if( pSign ) { return pSign->GetSig2( szPrivKey, pszSignature ); }
+    return DKIM_INVALID_CONTEXT;
 }
 
 

@@ -811,7 +811,9 @@ int CDKIMSign::ConstructSignature( char* szPrivKey, bool bUseIetfBodyHash, bool 
 		AddTagToSig( "c", "relaxed/relaxed", 0, false );
 		break;
 	case DKIM_SIGN_RELAXED_SIMPLE:
-		AddTagToSig( "c", "relaxed", 0, false );
+// @Kai:
+//		AddTagToSig( "c", "relaxed", 0, false );
+		AddTagToSig( "c", "relaxed/simple", 0, false );
 		break;
 	}
 

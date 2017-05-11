@@ -27,78 +27,78 @@ class CDKIMSign : public CDKIMBase
 {
 public:
 
-	CDKIMSign();
-	~CDKIMSign();
+  CDKIMSign();
+  ~CDKIMSign();
 
-	int Init( DKIMSignOptions* pOptions );
+  int Init( DKIMSignOptions* pOptions );
 
-	int GetSig( char* szPrivKey, char* szSignature, unsigned nSigLength );
-	int GetSig2( char* szPrivKey, char** pszSignature );
+  int GetSig( char* szPrivKey, char* szSignature, unsigned nSigLength );
+  int GetSig2( char* szPrivKey, char** pszSignature );
 
-	virtual int ProcessHeaders(void);
-	virtual int ProcessBody( char* szBuffer, int nBufLength, bool bEOF );
+  virtual int ProcessHeaders(void);
+  virtual int ProcessBody( char* szBuffer, int nBufLength, bool bEOF );
 
-	enum CKDKIMConstants { OptimalHeaderLineLength = 65 };
+  enum CKDKIMConstants { OptimalHeaderLineLength = 65 };
 
 protected:
 
-	void Hash( const char* szBuffer, int nBufLength, bool bHdr, bool bAllmanOnly = false );
+  void Hash( const char* szBuffer, int nBufLength, bool bHdr, bool bAllmanOnly = false );
 
-	bool SignThisTag( const string& sTag );
-	void GetHeaderParams( const string& sHdr );
-	void ProcessHeader( const string& sHdr );
-	bool ParseFromAddress( void );
+  bool SignThisTag( const string& sTag );
+  void GetHeaderParams( const string& sHdr );
+  void ProcessHeader( const string& sHdr );
+  bool ParseFromAddress( void );
 
-	void InitSig(void);
-	void AddTagToSig( const char* const Tag, const string &sValue, char cbrk, bool bFold );
-	void AddTagToSig( const char* const Tag, unsigned long nValue );
-	void AddInterTagSpace( int nSizeOfNextTag );
-	void AddFoldedValueToSig( const string &sValue, char cbrk );
+  void InitSig(void);
+  void AddTagToSig( const char* const Tag, const string &sValue, char cbrk, bool bFold );
+  void AddTagToSig( const char* const Tag, unsigned long nValue );
+  void AddInterTagSpace( int nSizeOfNextTag );
+  void AddFoldedValueToSig( const string &sValue, char cbrk );
 
-	bool IsRequiredHeader( const string& sTag );
-	int ConstructSignature( char* szPrivKey, bool bUseIetfBodyHash, bool bUseSha256 );
+  bool IsRequiredHeader( const string& sTag );
+  int ConstructSignature( char* szPrivKey, bool bUseIetfBodyHash, bool bUseSha256 );
 
-	int AssembleReturnedSig( char* szPrivKey );
+  int AssembleReturnedSig( char* szPrivKey );
 
-	EVP_MD_CTX m_Hdr_ietf_sha1ctx;		/* the header hash for ietf sha1  */
-	EVP_MD_CTX m_Hdr_ietf_sha256ctx;	/* the header hash for ietf sha256 */
+  EVP_MD_CTX m_Hdr_ietf_sha1ctx;    /* the header hash for ietf sha1 */
+  EVP_MD_CTX m_Hdr_ietf_sha256ctx;  /* the header hash for ietf sha256 */
 
-	EVP_MD_CTX m_Bdy_ietf_sha1ctx;		/* the body hash for ietf sha1  */
-	EVP_MD_CTX m_Bdy_ietf_sha256ctx;	/* the body hash for ietf sha256 */
+  EVP_MD_CTX m_Bdy_ietf_sha1ctx;    /* the body hash for ietf sha1 */
+  EVP_MD_CTX m_Bdy_ietf_sha256ctx;  /* the body hash for ietf sha256 */
 
-	EVP_MD_CTX m_allman_sha1ctx;		/* the hash for allman sha1  */
+  EVP_MD_CTX m_allman_sha1ctx;      /* the hash for allman sha1 */
 
-	int m_Canon;				// canonization method
+  int m_Canon;  /* canonization method */
 
-	int m_EmptyLineCount;
+  int m_EmptyLineCount;
 
-	string hParam;
-	string sFrom;
-	string sSender;
-	string sSelector;
-	string sDomain;
-	string sIdentity;					// for i= tag, if empty tag will not be included in sig
-	string sRequiredHeaders;
+  string hParam;
+  string sFrom;
+  string sSender;
+  string sSelector;
+  string sDomain;
+  string sIdentity;   /* for i= tag, if empty tag will not be included in sig */
+  string sRequiredHeaders;
 
-	bool m_IncludeBodyLengthTag;
-	int m_nBodyLength;
-	time_t m_ExpireTime;
-	int m_nIncludeTimeStamp;				// 0 = don't include t= tag, 1 = include t= tag
-	int m_nIncludeQueryMethod;				// 0 = don't include q= tag, 1 = include q= tag
-	int m_nHash;							// use one of the DKIM_HASH_xx constants here
-	int m_nIncludeCopiedHeaders;			// 0 = don't include z= tag, 1 = include z= tag
-	int m_nIncludeBodyHash;					// 0 = calculate sig using draft 0, 1 = include bh= tag and 
-											// use new signature computation algorithm
+  bool m_IncludeBodyLengthTag;
+  int m_nBodyLength;
+  time_t m_ExpireTime;
+  int m_nIncludeTimeStamp;      // 0 = don't include t= tag, 1 = include t= tag
+  int m_nIncludeQueryMethod;    // 0 = don't include q= tag, 1 = include q= tag
+  int m_nHash;                  // use one of the DKIM_HASH_xx constants here
+  int m_nIncludeCopiedHeaders;  // 0 = don't include z= tag, 1 = include z= tag
+  int m_nIncludeBodyHash;       // 0 = calculate sig using draft 0, 1 = include bh= tag and
+                                // use new signature computation algorithm
 
-	DKIMHEADERCALLBACK m_pfnHdrCallback;
+  DKIMHEADERCALLBACK m_pfnHdrCallback;
 
-	string m_sSig;
-	int m_nSigPos;
+  string m_sSig;
+  int m_nSigPos;
 
-	string m_sReturnedSig;
-	bool m_bReturnedSigAssembled;
+  string m_sReturnedSig;
+  bool m_bReturnedSigAssembled;
 
-	string m_sCopiedHeaders;
+  string m_sCopiedHeaders;
 };
 
 #endif // DKIMSIGN_H

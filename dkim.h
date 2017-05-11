@@ -26,24 +26,24 @@ extern "C" {
 #endif
 
 // DKIM Body hash versions
-#define DKIM_BODYHASH_ALLMAN_1	1
-#define DKIM_BODYHASH_IETF_1	2
-#define DKIM_BODYHASH_BOTH		DKIM_BODYHASH_ALLMAN_1 | DKIM_BODYHASH_IETF_1
+#define DKIM_BODYHASH_ALLMAN_1  1
+#define DKIM_BODYHASH_IETF_1    2
+#define DKIM_BODYHASH_BOTH      DKIM_BODYHASH_ALLMAN_1 | DKIM_BODYHASH_IETF_1
 
 // DKIM hash algorithms
-#define DKIM_HASH_SHA1			1
-#define DKIM_HASH_SHA256		2
+#define DKIM_HASH_SHA1          1
+#define DKIM_HASH_SHA256        2
 #define DKIM_HASH_SHA1_AND_256  DKIM_HASH_SHA1 | DKIM_HASH_SHA256
 
 // DKIM canonicalization methods
-#define DKIM_CANON_SIMPLE		1
-#define DKIM_CANON_NOWSP		2
-#define DKIM_CANON_RELAXED		3
+#define DKIM_CANON_SIMPLE       1
+#define DKIM_CANON_NOWSP        2
+#define DKIM_CANON_RELAXED      3
 
-#define DKIM_SIGN_SIMPLE			MAKELONG(DKIM_CANON_SIMPLE,DKIM_CANON_SIMPLE)
-#define DKIM_SIGN_SIMPLE_RELAXED	MAKELONG(DKIM_CANON_RELAXED,DKIM_CANON_SIMPLE)
-#define DKIM_SIGN_RELAXED			MAKELONG(DKIM_CANON_RELAXED,DKIM_CANON_RELAXED)
-#define DKIM_SIGN_RELAXED_SIMPLE	MAKELONG(DKIM_CANON_SIMPLE,DKIM_CANON_RELAXED)
+#define DKIM_SIGN_SIMPLE            MAKELONG(DKIM_CANON_SIMPLE,DKIM_CANON_SIMPLE)
+#define DKIM_SIGN_SIMPLE_RELAXED    MAKELONG(DKIM_CANON_RELAXED,DKIM_CANON_SIMPLE)
+#define DKIM_SIGN_RELAXED           MAKELONG(DKIM_CANON_RELAXED,DKIM_CANON_RELAXED)
+#define DKIM_SIGN_RELAXED_SIMPLE    MAKELONG(DKIM_CANON_SIMPLE,DKIM_CANON_RELAXED)
 
 // DKIM Error codes
 #define DKIM_SUCCESS						0		// operation successful
@@ -90,9 +90,9 @@ typedef int (DKIM_CALL *DKIMDNSCALLBACK)(const char* szFQDN, char* szBuffer, int
 
 typedef struct DKIMContext_t
 {
-	unsigned int reserved1;
-	unsigned int reserved2;
-	void*		 reserved3;
+  unsigned int reserved1;
+  unsigned int reserved2;
+  void*        reserved3;
 } DKIMContext;
 
 typedef struct DKIMSignOptions_t

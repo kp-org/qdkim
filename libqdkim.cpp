@@ -129,6 +129,8 @@ int main(int argc, char* argv[])
 				else if( argv[n][2] == 't' )
 				{
 					opts.nCanon = DKIM_SIGN_RELAXED_SIMPLE;
+//printf("c: %l",opts.nCanon);
+//exit(1);
 				}
 				else if( argv[n][2] == 'u' )
 				{
