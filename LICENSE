@@ -1,3 +1,20 @@
-This software is  Copyright ©2015 by Kai Peter, and may be copied and
-modified according to the  GNU GENERAL PUBLIC LICENSE (GPL) Version 2
-or a later version. This software comes with no warranty of any kind.
+ISC License (ISC)
+
+Copyright ©2015, ©2017 Kai Peter <kp@openqmail.org>
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without  fee is hereby granted,  provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF FITNESS
+AND  MERCHANTABILITY.  IN NO  EVENT  SHALL  THE AUTHOR BE LIABLE FOR ANY
+SPECIAL,  DIRECT,  INDIRECT,  OR CONSEQUENTIAL  DAMAGES  OR  ANY DAMAGES
+WHATSOEVER RESULTING  FROM LOSS OF USE,  DATA OR PROFITS,  WHETHER IN AN
+ACTION OF CONTRACT,  NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+
+Any included code with a different license  remains under their original
+license.  This is in general all code  taken from libdkim-1.0.21.  These
+license texts are part of this software.

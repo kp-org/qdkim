@@ -1,0 +1,55 @@
+#!/bin/sh
+#********************************************************************************
+# check for existing qmail installation
+[ ! -f `head -1 conf-home`/bin/qmail-smtpd ] && \
+  echo "Couldn't find an installation! Check 'conf-home'! Aborting!" && exit
+
+#********************************************************************************
+make clean 2>/dev/null
+cp Makefile.in Makefile.in.tmp
+
+OS=`uname`
+echo "Checking system ... "${OS}" found!"
+if [ $OS ] && [ $OS == "Linux" ] ; then
+#if [ `uname` == "Linux" ] ; then
+   echo "Add -lresolv to linker flags ... done!"
+   sed s}'LFLAGS ='}'LFLAGS =-lresolv'}g Makefile.in.tmp > Makefile.tmp
+   mv Makefile.tmp Makefile.in.tmp
+fi
+
+VERS="VERSION="`head -1 VERSION.lib`
+echo "Set version string ... "`head -1 VERSION`
+sed s}^VERSION.*$}$VERS}g Makefile.in.tmp > Makefile.tmp
+
+mv Makefile.tmp Makefile
+rm Makefile.in.tmp
+
+
+#********************************************************************************
+# Check for external tools
+
+# check for system tools (required) !!!
+for f in bash hostname [ test make perl awk fmt unix2dos
+do
+  echo -n "Checking for $f ... "
+  which $f 2>/dev/null
+  if [ $? -ne 0 ] ; then echo "not found!" ; exit 1 ; fi
+done
+
+
+
+
+#n=`find /usr/local/*/bin -name qmail-smtpd -type f -print > instdir.tmp`
+
+#n=`find /usr/local/*/bin -name qmail-smtpd -type f -print | wc -l`
+n=`find /{usr/local,var}/* -name qmail-smtpd -type f -print | xargs dirname | xargs dirname | tee instdir.tmp |  wc -l`
+if [ $n -gt 1 ] ; then
+  echo "Found multiple possible installations:"
+#  cat instdir.tmp
+fi
+if [ $n = 1 ] ; then cat instdir.tmp ; fi
+#QMAILDIR=`head -1 conf-home`
+
+#mkdir -p QMAILDIR/etc/dkimkeys
+
+echo "Done! Now run make."

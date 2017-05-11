@@ -1,0 +1,24 @@
+#!/bin/sh
+
+QMAILDIR=`head -1 conf-home`
+
+# get user and group id's
+GRPS=`ls -g $QMAILDIR/bin/qmail-send | awk '{ print $3; }'`
+USRR=`ls -lG $QMAILDIR/bin/qmail-remote | awk '{ print $3; }'`
+
+cp mkdkimkey qmail-sdkim qmail-vdkim   "$QMAILDIR/bin"
+chown root."$GRPS" "$QMAILDIR/bin/mkdkimkey"
+chown root."$GRPS" "$QMAILDIR/bin/qmail-sdkim"
+chown root."$GRPS" "$QMAILDIR/bin/qmail-vdkim"
+
+cp libqdkim  "$QMAILDIR/bin"
+chown root."$GRPS" "$QMAILDIR/bin/libqdkim"
+# config
+cp qdkim.conf "$QMAILDIR/etc"
+chown root.$GRPS "$QMAILDIR/etc/qdkim.conf"
+# manual pages
+cp qmail-*.8       "$QMAILDIR/man/man8"
+cp qdkim.conf.5    "$QMAILDIR/man/man5"
+chown -R root.root "$QMAILDIR/man"
+
+#mkdir -p QMAILDIR/etc/dkimkeys

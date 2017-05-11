@@ -1,0 +1,20 @@
+Return-Path: <kp@eqmail.org>
+Delivered-To: kp@xaero.aldox.de
+Received: (qmail 7128 invoked from network); 10 May 2017 11:57:23 +0200
+Received: from gorre.aldox.de (192.168.8.177)
+  by 0 with SMTP; 10 May 2017 11:57:23 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=eqmail.org;
+	s=default; l=12; x=1495015042; i=kp@eqmail.org; h=Received:Date:
+	Message-ID:From:Cc; bh=4k1AnmkRvFKGmS4K610AWk9QsFdhXA8x7+nf6pAJR
+	pQ=; b=redOtnME7WqW6a20i+FPpCE0aKPfiYu83QMO2wT5gzQBVM+VyK8FzO1xU
+	GX+dgxGgdseSiLUBj89MRU5+3Kz8ujGK6gUkrQCoo8pXpGhvgjOkaykhuDRdjlUn
+	tivDh/mqS90XePEKpp+0jH9DLaLSbRKcSkXahN/Grgj0VO+gME=
+Received: (qmail 23816 invoked by uid 0); 10 May 2017 11:57:22 +0200
+Date: 10 May 2017 11:57:22 +0200
+Message-ID: <20170510095722.23815.qmail@gorre.aldox.de>
+From: kp@eqmail.org
+Cc: recipient list not shown: ;
+X-Spam-Status: No, hits=0.000000 required=0.900000
+
+sdkim test
+

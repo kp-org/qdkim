@@ -1,0 +1,80 @@
+.TH libqdkim 8 "" openqmail
+.SH NAME
+xdkim \- handles DKIM signatures from stdin
+.SH SYNOPSIS
+.B xdkim
+.I options [tags] <infile> [<privkeyfile> <outfile>]
+
+\fIoptions\fR is a series of getopt-style options to handle the behavior of
+\fBxdkim\fR. \fItags\fR is a series like \fIoptions\fR to specify values of
+tags of a signature.
+.SH DESCRIPTION
+\fBxdkim\fR creates DKIM signatures and add them to email headers or verifies
+DKIM signatures. Line endings have to be \fBCRLF\fR for verification.
+.SH OPTIONS
+.TP
+-s
+." \fIkey\fR
+signs a message using \fIprivkeyfile\fR, which is a path to a file with a
+private key (PEM format). The base name of the file is used as selector. Reads
+the email message on stdin and prints the \fIDKIM-Signature\fR header.
+.TP
+-v
+Verifies a message and prints the result. On failure it exits with a non-zero exit code and includes the code to the result.
+.TP
+-h
+prints short help and exists
+.SH TAGS
+.TP
+-l
+include the body length tag, if not provided it will not be included
+.TP
+-q
+include query method tag, if not provided it will not be included
+.TP
+-t
+include a timestamp tag, if not provided it will not be included
+." .TP
+." -f
+." issue error if not all message's From headers are in signature
+." .TP
+." -h
+." include Copied Headers
+." .TP
+." -p \fIssp\fR | \fIadsp\fR
+." 0 - disable practice (default), 1- SSP, or 2 - ADSP verification
+.TP
+-b<\fIstandard\fR>
+standard is a numeric value (1=allman, 2=ietf or 3=both)
+.TP
+-c<\fIcanonicalization\fR>
+canonicalization is one of r, s, t or u (r=relaxed [DEFAULT], s=simple, t=relaxed/simple, u=simple/relaxed)
+-d \fIdomain\fR
+the domain tag, if not provided, determined from the sender/from header
+.TP
+-i<\fIidentity\fR>
+the identity (usually sender address), if not provided it will not be included
+.TP
+-x<\fIexpire_time\fR>
+the expire time in seconds since epoch ( DEFAULT = current time + 604800). If set to - then it will not be included
+.TP
+-z<\fIhash\fR>
+a numeric value to set the rsa key type (1=sha1, 2=sha256, 3=both)
+.TP
+-y<\fIselector\fR>
+the selector tag (DEFAULT=default)
+.SH EXAMPLES
+To sign a message and assuming your domainkeys are in \fI/etc/domainkeys\fR do:
+.EX
+    xdkim -ydefault -d"example.com" -i"me@example.com" -l -b2 -cr -z2 \\
+          -s "$InMsg" /etc/domainkeys/example.org/default "$OutMsg" 2>/dev/null
+.EE
+
+To verify a message, where message is a DKIM signed email:
+
+.EX
+    xdkim -v <message>
+.EE
+
+.SH "SEE ALSO"
+qmail-dkim(8), qmail-sdkim(8), qmail-vdkim(8)

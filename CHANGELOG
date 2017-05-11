@@ -1,3 +1,51 @@
+commit b49457386bfbfad3317968026e70697bff326fc6
+Author: Kai Peter <kp@openqmail.org>
+Date:   Wed May 10 10:19:25 2017 +0200
+
+    qmail-sdkim: removed obsolete code, updated man page
+
+commit 2f3a0d5a2f09982a1a606ef95bd5833298043f55
+Author: Kai Peter <kp@openqmail.org>
+Date:   Wed May 10 09:56:49 2017 +0200
+
+    renamed 'mkdomainkey' to 'mkdkimkey', improved code and man page
+
+commit 3fb114135c4dd95b235b97702f20998850052115
+Author: Kai Peter <kp@openqmail.org>
+Date:   Sun May 7 08:57:43 2017 +0200
+
+    qmail-sdkim: more failsafe, usage of config file
+
+commit 09e643ca2a0d961612e89f049a294135bcc0e81e
+Author: Kai Peter <kp@openqmail.org>
+Date:   Fri May 5 11:25:02 2017 +0200
+
+    added Makefile and switched to 'make' build process
+
+commit c579989a7e34e98c7cd5153bd7254eceaa6ba962
+Author: Kai Peter <kp@openqmail.org>
+Date:   Fri May 5 11:07:02 2017 +0200
+
+    typo in mkdomainkey.8
+
+commit 4cac84d5267b25b23d6021274e3f4273fd69a2ea
+Author: Kai Peter <kp@openqmail.org>
+Date:   Fri Feb 19 11:13:44 2016 +0100
+
+    initial commit
+
+commit 939df0d2726c2ea71c805d5cb150f1231aa3630e
+Author: Kai Peter <kp@openqmail.org>
+Date:   Thu Feb 18 12:59:10 2016 +0100
+
+    Create README.md
+
+
+########## BELOW IS THE CHANGELOG BEFORE USING GIT ##########
+
+Changes: qmail-xdkim ****************************************
+
+20170219: created git repo
 20160218: qmail-vdkim-0.42-beta
           - added variable XDKIM
           - created man page qmail-vdkim.8
@@ -6,3 +54,24 @@
 20160210: qmail-sdkim-0.43
           - added PARENTLEVEL for third and fourth level domains
 
+Changes: libdkim/xdkim **************************************
+
+20160426:
+  - changed license to ISC
+20160211:
+  - removed unused DKIMSignGetSig function (commented out)
+  - added man page
+  - deleted WIN32 stuff
+20160210: converted all files to UNIX format
+  - added configure, Makefile.in
+  - removed '#ifdef WIN32' (commented out)
+  - changed default selector to "default"
+  - unset "bardenhagen" identity and domain
+20160208:
+  - disabled requirement 'subject' (changed options to 1)
+20160205:
+  - strtok_r.patch
+  - fix_warnings.patch
+  - dos2unix Makefile
+  - added '-lresolv' to LDFLAGS
+  - applied corrected usage patch
