@@ -18,7 +18,7 @@ Switch DKIM signing ON or OFF (default: disabled). This have to be set to \fIDKS
 \fIQMAILHOME/etc/qdkim.conf\fR explizit to enable signing.
 .TP 3
 .IR DKLIB
-Name of the DKIM library to use (default: \fIlibqdkim\fR). An alternative is \fIlibdkimtest\fR.
+Name of the DKIM library to use (default: \fBlibqdkim\fR). An alternative is \fBlibdkimtest\fR.
 .TP 3
 .IR QMAILREMOTE
 Contains the name of the real \fBqmail-remote\fR (binary) if necessary.

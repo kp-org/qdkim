@@ -1,0 +1,32 @@
+.TH qmail-vdkim 8 "" openqmail
+.SH NAME
+qmail-vdkim \- verify DKIM signatures
+.SH SYNOPSIS
+.Bqmail-vdkim
+.SH DESCRIPTION
+\fBqmail-vdkim\fR have to plugin into the \fIqmail-smtpd\fR->\fIqmail-queue\fR
+pipeline.
+.P
+\fBqmail-vdkim\fR checks the incoming message for a DKIM signature. On success it calls
+an external library \fBlibqdkim\fR to verify the signature. It checks the result from
+the external library and inserts a header '\fIX-Authentication-Result:\fR'.
+.SH CONFIGURATION
+.B qmail-vdkim 
+uses several variables, which can be set in the environment too.
+.TP 3
+.IR DOVRFY
+Switch verification ON or OFF (default: OFF). This have to be set \fIDOVRFY=1\fR in
+\fIQMAILHOME/etc/qdkim.conf\fR explizit to enable verification.
+.TP 3
+.IR DKLIB
+Name of the external library to use (default: \fBlibqdkim\fR).
+.TP 3
+.IR $DKQUEUE
+This have to contain the name of the next program which should be called in the pipe.
+Usually it is \fBQMAILHOME/bin/qmail-queue\fR (default).
+.SH DEPENDENCIES
+\fBqmail-vdkim\fR requires \fBunix2dos\fR from the package \fIdos2unix\fR.
+.SH "AUTHOR"
+Kai Peter (©2017), kp@openqmail.org
+.SH "SEE ALSO"
+qmail-sdkim(8), qdkim.conf(5), unix2dos(1)
