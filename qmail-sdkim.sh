@@ -4,7 +4,7 @@
 #  Author: Kai Peter, ©2013-©2017 (kp@openqmail.org)                            #
 #          (based on work by Joerg Backschues & Kyle Wheeler)                   #
 # Version: 0.57                                                                 #
-# Licence: See file LICENSE file                                                #
+# Licence: See LICENSE file                                                     #
 #                                                                               #
 # Description: Add DKIM signature to outgoing messages                          #
 #********************************************************************************
@@ -19,7 +19,8 @@ SENDER="$2"                   # HAVE TO be valid!
 # these files HAVE TO exists from *qmail, else - bummer
 # (Hint: if 'qmail-remote' was renamed, set it in config file!)
 [ -f "$QMAILREMOTE" ] || QMAILREMOTE=`dirname $0`"/qmail-remote"
-[ -f "$LOGGER" ] || LOGGER="QMAILHOME/bin/splogger"
+# do not use 'test -f' because $LOGGER could have params
+[ "$LOGGER" ] || LOGGER="QMAILHOME/bin/splogger"
 
 [ "$DOSIGN" ] || DOSIGN=0    # have to be initialized
 
@@ -72,15 +73,18 @@ if [[ $DKSIGN = *%* ]] ; then DKSIGN="${DKSIGN%%%*}${DOMAIN}${DKSIGN#*%}" ; fi
 
 # the signing process itself ****************************************************
 if [ -f "$DKSIGN" ] ; then
-   InMsg=`mktemp -p /tmp -t sdkim.XXXXXXXXXXXXXXX`
-   OutMsg=`mktemp -p /tmp -t sdkim.XXXXXXXXXXXXXXX`
+   [ -d "QMAILHOME/tmp" ] && TMPDIR="QMAILHOME/tmp" || TMPDIR="/tmp"
+    InMsg=`mktemp -p "$TMPDIR" -t sdkim.XXXXXXXXXXXXXXX`
+   OutMsg=`mktemp -p "$TMPDIR" -t sdkim.XXXXXXXXXXXXXXX`
    # sign the message: add CRLF ("\r\n") to every line of the message before
    cat - | sed 's/$'"/`echo \\\r`/" >"$InMsg"
+   FLDR=`dirname $DKSIGN`   # needed for file 'selector' below
    # this works (in most cases) fine (even with libdkim-1.0.21):
-   $DKLIB -y`cat /etc/domainkeys/$DOMAIN/selector` -d"$DOMAIN" -i"$SENDER" \
+   $DKLIB -y`cat $FLDR/selector` -d"$DOMAIN" -i"$SENDER" \
           -l -b2 -ct -z2 -s "$InMsg" "$DKSIGN" "$OutMsg" 2>/dev/null
    # remove 'CR' and handover to the real qmail-remote
-   (cat "$OutMsg" | tr -d '\015') | DoSend "$@"
+#   (cat "$OutMsg" | tr -d '\015') | DoSend "$@"
+   cat "$OutMsg" | DoSend "$@"
    EC=$?
    DelTmpFiles
    # write to system log
