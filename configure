@@ -12,9 +12,9 @@ OS=`uname`
 echo "Checking system ... "${OS}" found!"
 if [ $OS ] && [ $OS == "Linux" ] ; then
 #if [ `uname` == "Linux" ] ; then
-   echo "Add -lresolv to linker flags ... done!"
-   sed s}'LFLAGS ='}'LFLAGS =-lresolv'}g Makefile.in.tmp > Makefile.tmp
-   mv Makefile.tmp Makefile.in.tmp
+  echo "Add -lresolv to linker flags ... done!"
+  sed s}'LFLAGS ='}'LFLAGS =-lresolv'}g Makefile.in.tmp > Makefile.tmp
+  mv Makefile.tmp Makefile.in.tmp
 fi
 
 VERS="VERSION="`head -1 VERSION.lib`
@@ -29,7 +29,7 @@ rm Makefile.in.tmp
 # Check for external tools
 
 # check for system tools (required) !!!
-for f in bash hostname [ test make perl awk fmt unix2dos
+for f in bash hostname [ test make perl awk fmt unix2dos fixcrio
 do
   echo -n "Checking for $f ... "
   which $f 2>/dev/null

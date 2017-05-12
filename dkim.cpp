@@ -28,7 +28,7 @@
 #ifdef VERSION
 #define VERSION_STRING VERSION
 #else
-#define VERSION_STRING "1.0.22"
+#define VERSION_STRING "1.0.23"
 #endif
 
 static void InitContext( DKIMContext* pContext, bool bSign, void* pObject )

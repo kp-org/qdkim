@@ -1,3 +1,15 @@
+commit a57bafd4056759ca48a2f33aac170618a58cda03
+Author: Kai Peter <kp@openqmail.org>
+Date:   Thu May 11 19:20:14 2017 +0200
+
+    cleanup dns.h
+
+commit 946c7e207d39881d2bbc456783d9ade016e5975a
+Author: Kai Peter <kp@openqmail.org>
+Date:   Thu May 11 19:16:07 2017 +0200
+
+    upped version to 20170511-beta1
+
 commit 2997c025177f496e16448ce09bd727a1660aecd6
 Merge: e7b3213 c3a5226
 Author: Kai Peter <kp@openqmail.org>

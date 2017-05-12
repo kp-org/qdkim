@@ -897,7 +897,7 @@ int CDKIMSign::ConstructSignature( char* szPrivKey, bool bUseIetfBodyHash, bool 
   sSignedSig.assign( m_sSig.c_str() );
 
   // note that since we're not calling hash here, need to dump this
- // to the debug file if you want the full canonical form
+  // to the debug file if you want the full canonical form
 
   string sTemp;
 
@@ -979,9 +979,8 @@ int CDKIMSign::ConstructSignature( char* szPrivKey, bool bUseIetfBodyHash, bool 
   size = BIO_read(bio, buf, len);
   BIO_free_all(b64);
 
-// this should never happen
-  if (size >= len)
-  {
+  // this should never happen
+  if (size >= len) {
     delete[] buf;
     return DKIM_OUT_OF_MEMORY;  
   }

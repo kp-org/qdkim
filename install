@@ -13,6 +13,8 @@ chown root."$GRPS" "$QMAILDIR/bin/qmail-vdkim"
 
 cp libqdkim  "$QMAILDIR/bin"
 chown root."$GRPS" "$QMAILDIR/bin/libqdkim"
+cp qdkimcrlf  "$QMAILDIR/bin"
+chown root."$GRPS" "$QMAILDIR/bin/qdkimcrlf"
 # config file - don't overwrite existing one
 [ ! -f "$QMAILDIR/etc/qdkim.conf" ] && cp qdkim.conf "$QMAILDIR/etc"
 chown root.$GRPS "$QMAILDIR/etc/qdkim.conf"

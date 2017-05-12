@@ -4,7 +4,7 @@ VERSION=
 CFLAGS =-c -DVERSION=\"${VERSION}\"
 LFLAGS =
 LIBS   =-lcrypto
-#INCL	=  -I /usr/include/openssl/
+QINC   = -I../../qlibs/include
 
 SRCS = dkim.cpp dns.cpp dkimbase.cpp dkimsign.cpp dkimverify.cpp
 OBJS = $(SRCS:.cpp=.o)
@@ -12,7 +12,19 @@ OBJS = $(SRCS:.cpp=.o)
 default: all conf man
 	@echo Done!
 
-all: libqdkim mkdkimkey qmail-sdkim qmail-vdkim
+all: libqdkim qdkimcrlf mkdkimkey qmail-sdkim qmail-vdkim
+
+clean:
+	@echo -n Cleaning up ...
+	@rm -f *.o *.tmp libqdkim libqdkim.a qdkimcrlf Makefile qdkim.conf
+	@rm -f mkdkimkey qmail-sdkim qmail-vdkim *.8 qdkim.conf.5
+	@echo " done!"
+
+install: setup
+
+setup:
+	echo Installing qdkim
+	./install
 
 libqdkim.a: $(OBJS)
 	rm -f libqdkim.a
@@ -27,17 +39,11 @@ libqdkim.o: libqdkim.cpp
 .cpp.o:
 	g++ $(CFLAGS) $<
 
-clean:
-	@echo -n Cleaning up ...
-	@rm -f *.o *.tmp libqdkim libqdkim.a Makefile qdkim.conf
-	@rm -f mkdkimkey qmail-sdkim qmail-vdkim *.8 qdkim.conf.5
-	@echo " done!"
-
-install: setup
-
-setup:
-	echo Installing files
-	./install
+qdkimcrlf:
+	@./qlibs.sh
+	cc -O2 $(QINC) -Wall -c qdkimcrlf.c
+	cc qdkimcrlf.o pathexec.o env.a errmsg.a fd.a \
+	qstring.a time.a buffer.a sig.a stralloc.a -o $@
 
 mkdkimkey:
 	@echo creating $@

@@ -1,0 +1,22 @@
+- remove old DKIM signatures before create new ones (?)
+- handle config directory 'etc' <--> 'control' for backwards compat
+
+- use 'fixcrio' instead of 'unix2dos' ? (choice-able?)
+- add info about acces rights
+- configure: check if *qmail is installed and where
+
+  --> BUG: libdkimtest and libqdkim:  (see RfC 6376, A.3)
+      the c= tag is 'relaxed' or 'simple', but never 'relaxed/simple'
+      --> solved in dkimsign.cpp (line 804++)
+
+- check and prevent loops (e.g. $QMAILREMOTE)
+- access rights dkimkeys
+- vdkim: result: print 'eqmail.org only not 'de.xaero.eqmail.org'
+- trap error if the tool in beforemote returns an error
+- make description for error: 'Unable_to_run_qmail-bfrmt.'
+  --> the called file from beforeremote creates an error
+
+- compile with clang++ (freebsd)
+- add WHO to libqdkim.cpp
+- check for qlibs dir in configure
+- include headers in Makefile (qdkimcrlf)

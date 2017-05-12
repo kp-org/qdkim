@@ -1,9 +1,7 @@
-obsolete
-README
-TODO
-FILES
 *.o
 *.a
+*.5
+*.8
 *.bck
 *.tmp
 *.bck.*
@@ -14,4 +12,5 @@ qdkim.conf
 libqdkim
 mkchangelog
 CHANGELOG.old
-message
+Makefile
+qdkimcrlf

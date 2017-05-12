@@ -43,12 +43,13 @@ if [ ! "$DOVRFY" = "1" ] ; then $DKQUEUE "$@"; exit 0 ; fi
 # first set some default vars
 [ -d "QMAILHOME/tmp" ] && TMPDIR="QMAILHOME/tmp" || TMPDIR="/tmp"
 DONEBY=`basename $0`" at "`hostname` # This doesn't confirm exactily with RfC6376
-#DOMAIN="unknown"   # default assumption
+DOMAIN="unknown"   # default assumption
 VALID="fail"       # default assumption
 tMsg=`mktemp -p "$TMPDIR" -t vdkim.XXXXXXXXXXXXXXXXXXX`
 HEAD=`mktemp -p "$TMPDIR" -t vdkim.XXXXXXXXXXXXXXXXXXX`
 BODY=`mktemp -p "$TMPDIR" -t vdkim.XXXXXXXXXXXXXXXXXXX`
-cat - >"$tMsg"     # save the message
+#cat - >"$tMsg"     # save the message
+QMAILHOME/bin/qdkimcrlf cat - >"$tMsg"
 
 # check for header 'DKIM-Signature'
 cat $tMsg | grep "^DKIM-Signature" 2>&1 >/dev/null
@@ -56,10 +57,10 @@ if [ $? -ne 0 ] ; then
   LogMsg="qmail-vdkim: no DKIM signatures found." ; DoLog
   cat "$tMsg" | $DKQUEUE "$@" ; rm -f "$tMsg" ; exit 0 ; fi
 
-# get from domain from "From:" field - bad idea :(
-#DOMAIN=$(cat $tMsg | grep ^[Ff]rom: | grep '@' | tr -d '\15' | cut -d@ -f2 | cut -d\> -f1)
+# get from domain from "From:" field
+DOMAIN=$(cat $tMsg | grep ^[Ff]rom: | grep '@' | tr -d '\15' | cut -d@ -f2 | cut -d\> -f1)
 
-unix2dos "$tMsg"     # --> !!!! IMPROVE THIS !!!!!!
+#unix2dos "$tMsg"     # --> !!!! IMPROVE THIS !!!!!!
 
 # redirection of stderr and pipe to /dev/null is a MUST!
 $DKLIB -v $tMsg | grep 'Signature #[0-9]: Success' 2>&1 >/dev/null
@@ -76,7 +77,7 @@ printf "X-Authentication-Results: dkim=$VALID ($DONEBY)\n\n" | \
 # concatenate header and body together again
 cat "$HEAD" "$BODY" | "$DKQUEUE" "$@"
 EC=$?
-#LogMsg="qmail-vdkim: Verify DKIM for $DOMAIN: $VALID" ; DoLog
-LogMsg="qmail-vdkim: Verify DKIM: $VALID" ; DoLog
+LogMsg="qmail-vdkim: Verify DKIM for $DOMAIN: $VALID" ; DoLog
+#LogMsg="qmail-vdkim: Verify DKIM: $VALID" ; DoLog
 DelTmpFiles
 exit $EC
