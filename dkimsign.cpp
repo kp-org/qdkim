@@ -780,349 +780,303 @@ bool CDKIMSign::IsRequiredHeader( const string& sTag )
 
 int CDKIMSign::ConstructSignature( char* szPrivKey, bool bUseIetfBodyHash, bool bUseSha256 )
 {
-	string sSignedSig;
-	unsigned char* sig;
-    EVP_PKEY *pkey;
-    BIO *bio, *b64;
-	unsigned int siglen;
-	int size;
-	int len;
-	char* buf;
-	
-	// construct the DKIM-Signature: header and add to hash
-	InitSig();
+  string sSignedSig;
+  unsigned char* sig;
+  EVP_PKEY *pkey;
+  BIO *bio, *b64;
+  unsigned int siglen;
+  int size;
+  int len;
+  char* buf;
 
-	if( bUseIetfBodyHash )
-	{
-		AddTagToSig( "v", "1", 0, false );
-	}
+  /* construct the DKIM-Signature: header and add to hash */
+  InitSig();
 
-	AddTagToSig( "a", bUseSha256 ? "rsa-sha256" : "rsa-sha1", 0, false );
+  if( bUseIetfBodyHash ) { AddTagToSig( "v", "1", 0, false ); }
 
-	switch( m_Canon )
-	{
-	case DKIM_SIGN_SIMPLE:
-		AddTagToSig( "c", "simple", 0, false );
-		break;
-	case DKIM_SIGN_SIMPLE_RELAXED:
-		AddTagToSig( "c", "simple/relaxed", 0, false );
-		break;
-	case DKIM_SIGN_RELAXED:
-		AddTagToSig( "c", "relaxed/relaxed", 0, false );
-		break;
-	case DKIM_SIGN_RELAXED_SIMPLE:
-// @Kai:
-//		AddTagToSig( "c", "relaxed", 0, false );
-		AddTagToSig( "c", "relaxed/simple", 0, false );
-		break;
-	}
+  AddTagToSig( "a", bUseSha256 ? "rsa-sha256" : "rsa-sha1", 0, false );
 
-	AddTagToSig( "d", sDomain, 0, false );
+  switch( m_Canon ) {
+    case DKIM_SIGN_SIMPLE:
+//        AddTagToSig( "c", "simple", 0, false );
+        AddTagToSig( "c", "simple/simple", 0, false );
+        break;
+    case DKIM_SIGN_SIMPLE_RELAXED:
+        AddTagToSig( "c", "simple/relaxed", 0, false );
+        break;
+    case DKIM_SIGN_RELAXED:
+        AddTagToSig( "c", "relaxed/relaxed", 0, false );
+        break;
+    case DKIM_SIGN_RELAXED_SIMPLE:
+//      AddTagToSig( "c", "relaxed", 0, false );   // --> orig line
+        AddTagToSig( "c", "relaxed/simple", 0, false );
+        break;
+  }
 
-	AddTagToSig( "s", sSelector, 0, false );
+  AddTagToSig( "d", sDomain, 0, false );
+  AddTagToSig( "s", sSelector, 0, false );
 
-	if( m_IncludeBodyLengthTag )
-	{
-		AddTagToSig( "l", m_nBodyLength );
-	}
+  if( m_IncludeBodyLengthTag ) { AddTagToSig( "l", m_nBodyLength ); }
 
-	if( m_nIncludeTimeStamp != 0 )
-	{
-		time_t t;
-		time( &t );
-		AddTagToSig( "t", t );
-	}
+  if( m_nIncludeTimeStamp != 0 ) {
+    time_t t;
+    time( &t );
+    AddTagToSig( "t", t );
+  }
 
-	if( m_ExpireTime != 0 )
-	{
-		AddTagToSig( "x", m_ExpireTime );
-	}
+  if( m_ExpireTime != 0 ) { AddTagToSig( "x", m_ExpireTime ); }
 
-	if( !sIdentity.empty() )
-	{
-		AddTagToSig( "i", sIdentity, 0, false );
-	}
-	
-	if( m_nIncludeQueryMethod )
-	{
-		AddTagToSig( "q", bUseIetfBodyHash ? "dns/txt" : "dns" , 0, false );
-	}
+  if( !sIdentity.empty() ) { AddTagToSig( "i", sIdentity, 0, false ); }
 
-	AddTagToSig( "h", hParam, ':', true );
+  if( m_nIncludeQueryMethod ) { 
+    AddTagToSig( "q", bUseIetfBodyHash ? "dns/txt" : "dns" , 0, false );
+  }
 
-	if( m_nIncludeCopiedHeaders )
-	{
-		AddTagToSig( "z", m_sCopiedHeaders, 0, true );
-	}
+  AddTagToSig( "h", hParam, ':', true );
 
-	if( bUseIetfBodyHash )
-	{
-		unsigned char Hash[EVP_MAX_MD_SIZE];
-		unsigned int nHashLen = 0;
+  if( m_nIncludeCopiedHeaders ) { AddTagToSig( "z", m_sCopiedHeaders, 0, true ); }
 
-		EVP_DigestFinal( bUseSha256 ? &m_Bdy_ietf_sha256ctx : &m_Bdy_ietf_sha1ctx, Hash, &nHashLen );
+  if( bUseIetfBodyHash )
+  {
+    unsigned char Hash[EVP_MAX_MD_SIZE];
+    unsigned int nHashLen = 0;
 
-		bio = BIO_new(BIO_s_mem());
-		if (!bio) {
-		  return DKIM_OUT_OF_MEMORY; 
-		}
-		b64 = BIO_new(BIO_f_base64());
-		if (!b64) 
-		{
-			BIO_free(bio);
-			return DKIM_OUT_OF_MEMORY;
-		}
-		BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
-		BIO_push(b64, bio);
-		if (BIO_write(b64, Hash, nHashLen) < (int)nHashLen) 
-		{
-		  BIO_free_all(b64);
-		  return DKIM_OUT_OF_MEMORY;
-		}
-		BIO_flush(b64);
-
-		len = nHashLen * 2;
-		buf = new char[len];
-
-		if( buf == NULL )
-		{
-			BIO_free_all(b64);
-			return DKIM_OUT_OF_MEMORY;
-		}
-
-		size = BIO_read(bio, buf, len);
-		BIO_free_all(b64);
-
-		// this should never happen
-		if (size >= len)
-		{
-			delete[] buf;
-			return DKIM_OUT_OF_MEMORY;  
-		}
-
-		buf[size] = '\0';
-
-		AddTagToSig( "bh", buf, 0, true );
-
-		delete[] buf;
-	}
-
-	AddInterTagSpace( 3 );
-
-	m_sSig.append( "b=" );
-	m_nSigPos += 2;
-
-	// Force a full copy - no reference copies please
-	sSignedSig.assign( m_sSig.c_str() );
-
-	// note that since we're not calling hash here, need to dump this
-	// to the debug file if you want the full canonical form
-
-	string sTemp;
-
-	if( HIWORD(m_Canon) == DKIM_CANON_RELAXED )
-	{
-		sTemp = RelaxHeader( sSignedSig );
-	}
-	else
-	{
-		sTemp = sSignedSig.c_str();
-	}
-
-	if( bUseIetfBodyHash )
-	{
-		EVP_SignUpdate( bUseSha256 ? &m_Hdr_ietf_sha256ctx : &m_Hdr_ietf_sha1ctx, sTemp.c_str(), sTemp.size() );
-	}
-	else
-	{
-		EVP_SignUpdate( &m_allman_sha1ctx, sTemp.c_str(), sTemp.size() );
-	}
- 
-	bio = BIO_new_mem_buf(szPrivKey, -1);
-	if( bio == NULL )
-		return DKIM_OUT_OF_MEMORY;
-
-    pkey = PEM_read_bio_PrivateKey(bio, NULL, NULL, NULL);
-    BIO_free(bio);
-
-    if (!pkey) 
-	{
-		return DKIM_BAD_PRIVATE_KEY;
-	}
-
-    siglen = EVP_PKEY_size(pkey);
-    int nSignRet;
-
-    sig = (unsigned char*) OPENSSL_malloc(siglen);
-	if( sig == NULL )
-	{
-		EVP_PKEY_free(pkey);
-		return DKIM_OUT_OF_MEMORY;
-	}
-	
-	if( bUseIetfBodyHash )
-	{
-		nSignRet = EVP_SignFinal( bUseSha256 ? &m_Hdr_ietf_sha256ctx : &m_Hdr_ietf_sha1ctx, sig, &siglen, pkey);
-	}
-	else
-	{
-		nSignRet = EVP_SignFinal( &m_allman_sha1ctx, sig, &siglen, pkey);
-	}
-
-    EVP_PKEY_free(pkey);
-
-	if( !nSignRet )
-	{
-		OPENSSL_free(sig);
-		return DKIM_BAD_PRIVATE_KEY; // key too small
-	}
+    EVP_DigestFinal( bUseSha256 ? &m_Bdy_ietf_sha256ctx : &m_Bdy_ietf_sha1ctx, Hash, &nHashLen );
 
     bio = BIO_new(BIO_s_mem());
     if (!bio) {
       return DKIM_OUT_OF_MEMORY; 
     }
     b64 = BIO_new(BIO_f_base64());
-    if (!b64) {
+    if (!b64) 
+    {
       BIO_free(bio);
       return DKIM_OUT_OF_MEMORY;
     }
     BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
     BIO_push(b64, bio);
-    if (BIO_write(b64, sig, siglen) < (int)siglen) 
-	{
-      OPENSSL_free(sig);
+    if (BIO_write(b64, Hash, nHashLen) < (int)nHashLen) 
+    {
       BIO_free_all(b64);
       return DKIM_OUT_OF_MEMORY;
     }
     BIO_flush(b64);
-    OPENSSL_free(sig);
 
-	len = siglen * 2;
-	buf = new char[len];
+    len = nHashLen * 2;
+    buf = new char[len];
 
-	if( buf == NULL )
-	{
-		BIO_free_all(b64);
-		return DKIM_OUT_OF_MEMORY;
-	}
+    if( buf == NULL )
+    {
+      BIO_free_all(b64);
+      return DKIM_OUT_OF_MEMORY;
+    }
 
     size = BIO_read(bio, buf, len);
     BIO_free_all(b64);
 
-	// this should never happen
+    // this should never happen
     if (size >= len)
-	{
-		delete[] buf;
-		return DKIM_OUT_OF_MEMORY;  
-	}
+    {
+       delete[] buf;
+       return DKIM_OUT_OF_MEMORY;  
+    }
 
     buf[size] = '\0';
 
-	AddFoldedValueToSig( buf, 0 );
+    AddTagToSig( "bh", buf, 0, true );
 
-	delete[] buf;
+    delete[] buf;
+  }
 
-	return DKIM_SUCCESS;
+  AddInterTagSpace( 3 );
+
+  m_sSig.append( "b=" );
+  m_nSigPos += 2;
+
+  // Force a full copy - no reference copies please
+  sSignedSig.assign( m_sSig.c_str() );
+
+  // note that since we're not calling hash here, need to dump this
+ // to the debug file if you want the full canonical form
+
+  string sTemp;
+
+  if( HIWORD(m_Canon) == DKIM_CANON_RELAXED ) {
+    sTemp = RelaxHeader( sSignedSig );
+  } else {
+    sTemp = sSignedSig.c_str();
+  }
+
+  if( bUseIetfBodyHash ) {
+    EVP_SignUpdate( bUseSha256 ? &m_Hdr_ietf_sha256ctx : &m_Hdr_ietf_sha1ctx, sTemp.c_str(), sTemp.size() );
+  } else {
+    EVP_SignUpdate( &m_allman_sha1ctx, sTemp.c_str(), sTemp.size() );
+  }
+
+  bio = BIO_new_mem_buf(szPrivKey, -1);
+  if( bio == NULL )
+    return DKIM_OUT_OF_MEMORY;
+
+  pkey = PEM_read_bio_PrivateKey(bio, NULL, NULL, NULL);
+  BIO_free(bio);
+
+  if (!pkey) { return DKIM_BAD_PRIVATE_KEY; }
+
+  siglen = EVP_PKEY_size(pkey);
+  int nSignRet;
+
+  sig = (unsigned char*) OPENSSL_malloc(siglen);
+  if( sig == NULL )
+  {
+    EVP_PKEY_free(pkey);
+    return DKIM_OUT_OF_MEMORY;
+  }
+
+  if( bUseIetfBodyHash )
+  {
+    nSignRet = EVP_SignFinal( bUseSha256 ? &m_Hdr_ietf_sha256ctx : &m_Hdr_ietf_sha1ctx, sig, &siglen, pkey);
+  } else {
+    nSignRet = EVP_SignFinal( &m_allman_sha1ctx, sig, &siglen, pkey);
+  }
+
+  EVP_PKEY_free(pkey);
+
+  if( !nSignRet )
+  {
+    OPENSSL_free(sig);
+    return DKIM_BAD_PRIVATE_KEY; // key too small
+  }
+
+  bio = BIO_new(BIO_s_mem());
+  if (!bio) {
+    return DKIM_OUT_OF_MEMORY; 
+  }
+  b64 = BIO_new(BIO_f_base64());
+  if (!b64) {
+    BIO_free(bio);
+    return DKIM_OUT_OF_MEMORY;
+  }
+  BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
+  BIO_push(b64, bio);
+  if (BIO_write(b64, sig, siglen) < (int)siglen) 
+  {
+    OPENSSL_free(sig);
+    BIO_free_all(b64);
+    return DKIM_OUT_OF_MEMORY;
+  }
+  BIO_flush(b64);
+  OPENSSL_free(sig);
+
+  len = siglen * 2;
+  buf = new char[len];
+
+  if( buf == NULL )
+  {
+    BIO_free_all(b64);
+    return DKIM_OUT_OF_MEMORY;
+  }
+
+  size = BIO_read(bio, buf, len);
+  BIO_free_all(b64);
+
+// this should never happen
+  if (size >= len)
+  {
+    delete[] buf;
+    return DKIM_OUT_OF_MEMORY;  
+  }
+
+  buf[size] = '\0';
+  AddFoldedValueToSig( buf, 0 );
+  delete[] buf;
+  return DKIM_SUCCESS;
 }
-
-
 
 int CDKIMSign::AssembleReturnedSig( char* szPrivKey )
 {
-	int nRet;
+  int nRet;
 
-	if( m_bReturnedSigAssembled )
-		return DKIM_SUCCESS;
+  if( m_bReturnedSigAssembled )
+    return DKIM_SUCCESS;
 
-	ProcessFinal();
+  ProcessFinal();
 
 	if( ParseFromAddress() == false )
 	{
 		//return DKIM_NO_SENDER;
 	}
 
-	Hash( "\r\n", 2, true, true ); // only for Allman sig
+  Hash( "\r\n", 2, true, true ); // only for Allman sig
 
-	string allmansha1sig, ietfsha256Sig, ietfsha1Sig;
+  string allmansha1sig, ietfsha256Sig, ietfsha1Sig;
 
-	if( m_nIncludeBodyHash < DKIM_BODYHASH_IETF_1 )
-	{
-		nRet = ConstructSignature( szPrivKey, false, false );
-		if( nRet == DKIM_SUCCESS )
-		{
-			allmansha1sig.assign( m_sSig );
-		}
-		else
-		{
-			return nRet;
-		}
-	}
-	else if( m_nIncludeBodyHash & DKIM_BODYHASH_IETF_1 )
-	{
-		if( m_nIncludeBodyHash & DKIM_BODYHASH_ALLMAN_1 )
-		{
-			nRet = ConstructSignature( szPrivKey, false, false );
-			if( nRet == DKIM_SUCCESS )
-			{
-				allmansha1sig.assign( m_sSig );
-			}
-			else
-			{
-				return nRet;
-			}
-		}
-		if( m_nHash & DKIM_HASH_SHA256 )
-		{
-			nRet = ConstructSignature( szPrivKey, true, true );
-			if( nRet == DKIM_SUCCESS )
-			{
-				ietfsha256Sig.assign( m_sSig );
-			}
-			else
-			{
-				return nRet;
-			}
-		}
-		if( m_nHash != DKIM_HASH_SHA256 )
-		{
-			nRet = ConstructSignature( szPrivKey, true, false );
-			
-			if( nRet == DKIM_SUCCESS )
-			{
-				ietfsha1Sig.assign( m_sSig );
-			}
-			else
-			{
-				return nRet;
-			}
-		}
-	}
+  if( m_nIncludeBodyHash < DKIM_BODYHASH_IETF_1 )
+  {
+    nRet = ConstructSignature( szPrivKey, false, false );
+    if( nRet == DKIM_SUCCESS )
+    {
+      allmansha1sig.assign( m_sSig );
+    } else {
+      return nRet;
+    }
+  }
+  else if( m_nIncludeBodyHash & DKIM_BODYHASH_IETF_1 )
+  {
+    if( m_nIncludeBodyHash & DKIM_BODYHASH_ALLMAN_1 )
+    {
+      nRet = ConstructSignature( szPrivKey, false, false );
+      if( nRet == DKIM_SUCCESS ) {
+        allmansha1sig.assign( m_sSig );
+      } else {
+        return nRet;
+      }
+    }
+    if( m_nHash & DKIM_HASH_SHA256 )
+    {
+      nRet = ConstructSignature( szPrivKey, true, true );
+        if( nRet == DKIM_SUCCESS )
+        {
+          ietfsha256Sig.assign( m_sSig );
+        } else {
+          return nRet;
+        }
+    }
+    if( m_nHash != DKIM_HASH_SHA256 )
+    {
+      nRet = ConstructSignature( szPrivKey, true, false );
+      if( nRet == DKIM_SUCCESS )
+      {
+        ietfsha1Sig.assign( m_sSig );
+      } else {
+        return nRet;
+      }
+    }
+  }
 
 
 //	fclose( fpdebug );
 //	fpdebug = NULL;
 
-	m_sReturnedSig.assign( allmansha1sig );
+  m_sReturnedSig.assign( allmansha1sig );
 
-	if( !ietfsha1Sig.empty() )
-	{
-		if( !m_sReturnedSig.empty() )
-		{
-			m_sReturnedSig.append( "\r\n" );
-		}
-		m_sReturnedSig.append( ietfsha1Sig );
-	}
+  if( !ietfsha1Sig.empty() )
+  {
+    if( !m_sReturnedSig.empty() )
+    {
+      m_sReturnedSig.append( "\r\n" );
+    }
+    m_sReturnedSig.append( ietfsha1Sig );
+  }
 
-	if( !ietfsha256Sig.empty() )
-	{
-		if( !m_sReturnedSig.empty() )
-		{
-			m_sReturnedSig.append( "\r\n" );
-		}
-		m_sReturnedSig.append( ietfsha256Sig );
-	}
+  if( !ietfsha256Sig.empty() )
+  {
+    if( !m_sReturnedSig.empty() )
+    {
+      m_sReturnedSig.append( "\r\n" );
+    }
+    m_sReturnedSig.append( ietfsha256Sig );
+  }
 
-	m_bReturnedSigAssembled = true;
-
-	return DKIM_SUCCESS;
+  m_bReturnedSigAssembled = true;
+  return DKIM_SUCCESS;
 }
