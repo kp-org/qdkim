@@ -19,8 +19,11 @@ chown root."$GRPS" "$QMAILDIR/bin/qdkimcrlf"
 [ ! -f "$QMAILDIR/etc/qdkim.conf" ] && cp qdkim.conf "$QMAILDIR/etc"
 chown root.$GRPS "$QMAILDIR/etc/qdkim.conf"
 # manual pages
-cp qmail-*.8       "$QMAILDIR/man/man8"
-cp qdkim.conf.5    "$QMAILDIR/man/man5"
+cp qmail-*.8       "$QMAILDIR/man/man8/"
+cp qdkim.conf.5    "$QMAILDIR/man/man5/"
 chown -R root.root "$QMAILDIR/man"
 
-#mkdir -p QMAILDIR/etc/dkimkeys
+# tmp
+mkdir -p "$QMAILDIR/tmp"
+chown root.qmail "$QMAILDIR/tmp"
+chmod 0770 "$QMAILDIR/tmp"

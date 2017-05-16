@@ -21,7 +21,7 @@ Switch verification ON or OFF (default: OFF). This have to be set \fIDOVRFY=1\fR
 .IR DKLIB
 Name of the external library to use (default: \fBlibqdkim\fR).
 .TP 3
-.IR $DKQUEUE
+.IR DKQUEUE
 This have to contain the name of the next program which should be called in the pipe.
 Usually it is \fBQMAILHOME/bin/qmail-queue\fR (default).
 .SH DEPENDENCIES

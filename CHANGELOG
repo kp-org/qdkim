@@ -1,3 +1,15 @@
+commit f0246dee95471079078bc0cb9b1231ab7df20dab
+Author: Kai Peter <kp@openqmail.org>
+Date:   Sat May 13 00:02:48 2017 +0200
+
+    removed dependancy 'unix2dos'
+
+commit 258ab6af23bcb6506684566ab2d60dc7c8201dfd
+Author: Kai Peter <kp@openqmail.org>
+Date:   Fri May 12 09:57:32 2017 +0200
+
+    dkimsign: corrected strings for c= tag
+
 commit a57bafd4056759ca48a2f33aac170618a58cda03
 Author: Kai Peter <kp@openqmail.org>
 Date:   Thu May 11 19:20:14 2017 +0200
