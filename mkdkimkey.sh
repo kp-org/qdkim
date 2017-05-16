@@ -70,7 +70,10 @@ if [ ! $PRINT ] ; then
   chmod 0711 $DKDIR
   chmod 0700 $DKDIR/$DOMAIN
   chmod 0600 $DKDIR/$DOMAIN/*
-  chown -R qmailr:qmail $DKDIR
+  USR=`ls -l /usr/local/qmail/queue/lock/tcpto | awk '{ print $3 }'`
+  GRP=`ls -l /usr/local/qmail/queue/lock/tcpto | awk '{ print $4 }'`
+#  chown -R qmailr:qmail $DKDIR
+  chown -R $USR:$GRP $DKDIR
  else
   test -f $DKDIR/$DOMAIN/rsa.public_$SELECTOR || \
   (errString="does not exist" && showError)
