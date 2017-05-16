@@ -10,7 +10,9 @@ qmail-vdkim
 mkdkimkey
 qdkim.conf
 libqdkim
+qdkimcrlf
 mkchangelog
 CHANGELOG.old
 Makefile
-qdkimcrlf
+conf-home
+conf-qlibs

@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
   opts.nIncludeBodyLengthTag = 0;
   opts.nIncludeQueryMethod = 0;
   opts.nIncludeTimeStamp = 0;
-  opts.expireTime = t + 604800;		// expires in 1 week
+  opts.expireTime = t + 604800;    // expires in 1 week
   strcpy( opts.szSelector, MYSELECTOR );
   strcpy( opts.szDomain, MYDOMAIN );
   strcpy( opts.szIdentity, MYIDENTITY );
@@ -214,35 +214,35 @@ int main(int argc, char* argv[])
 	}
 
 
-	if( bSign )
-	{
-		FILE* PrivKeyFP = fopen( PrivKeyFile, "r" );
+  if( bSign )
+  {
+    FILE* PrivKeyFP = fopen( PrivKeyFile, "r" );
 
-		if ( PrivKeyFP == NULL )
-		{
-		  printf( "libqdkim: can't open private key file %s\n", PrivKeyFile );
-		  exit(1);
-		}
-		nPrivKeyLen = fread( PrivKey, 1, sizeof(PrivKey), PrivKeyFP );
-		if (nPrivKeyLen == sizeof(PrivKey)) { /* TC9 */
-		  printf( "libqdkim: private key buffer isn't big enough, use a smaller private key or recompile.\n");
-		  exit(1);
-		}
-		PrivKey[nPrivKeyLen] = '\0';
-		fclose(PrivKeyFP);
+    if ( PrivKeyFP == NULL )
+    {
+      printf( "libqdkim: can't open private key file %s\n", PrivKeyFile );
+      exit(1);
+    }
+    nPrivKeyLen = fread( PrivKey, 1, sizeof(PrivKey), PrivKeyFP );
+    if (nPrivKeyLen == sizeof(PrivKey)) { /* TC9 */
+      printf( "libqdkim: private key buffer isn't big enough, use a smaller private key or recompile.\n");
+      exit(1);
+    }
+    PrivKey[nPrivKeyLen] = '\0';
+    fclose(PrivKeyFP);
 
 
-		FILE* MsgFP = fopen( MsgFile, "rb" );
+    FILE* MsgFP = fopen( MsgFile, "rb" );
 
-		if ( MsgFP == NULL ) 
-		{
-			printf( "libqdkim: can't open msg file %s\n", MsgFile );
-			exit(1);
-		}
+    if ( MsgFP == NULL ) 
+    {
+      printf( "libqdkim: can't open msg file %s\n", MsgFile );
+      exit(1);
+    }
 
-		n = DKIMSignInit( &ctxt, &opts );
+    n = DKIMSignInit( &ctxt, &opts );
 
-		while (1) {
+    while (1) {
 
 			BufLen = fread( Buffer, 1, sizeof(Buffer), MsgFP );
 
@@ -254,50 +254,47 @@ int main(int argc, char* argv[])
 			{
 				break;
 			}
-		}
+    }
 
-		fclose( MsgFP );
+    fclose( MsgFP );
 
 		//n = DKIMSignGetSig( &ctxt, PrivKey, szSignature, sizeof(szSignature) );
 
-		char* pSig = NULL;
+    char* pSig = NULL;
 
-		n = DKIMSignGetSig2( &ctxt, PrivKey, &pSig );
+    n = DKIMSignGetSig2( &ctxt, PrivKey, &pSig );
 
-		strcpy( szSignature, pSig );
+    strcpy( szSignature, pSig );
 
-		DKIMSignFree( &ctxt );
+    DKIMSignFree( &ctxt );
 
-		FILE* in = fopen( MsgFile, "rb" );
-		FILE* out = fopen( OutFile, "wb+" );
+    FILE* in = fopen( MsgFile, "rb" );
+    FILE* out = fopen( OutFile, "wb+" );
 
-		fwrite( szSignature, 1, strlen(szSignature), out );
-		fwrite( "\r\n", 1, 2, out );
+    fwrite( szSignature, 1, strlen(szSignature), out );
+    fwrite( "\r\n", 1, 2, out );
 
-		while (1) {
-			BufLen = fread( Buffer, 1, sizeof(Buffer), in );
-			if( BufLen > 0 )
-			{
-				fwrite( Buffer, 1, BufLen, out );
-			}
-			else
-			{
-				break;
-			}
-		}
+    while (1) {
+      BufLen = fread( Buffer, 1, sizeof(Buffer), in );
+      if( BufLen > 0 ) {
+        fwrite( Buffer, 1, BufLen, out );
+      } else {
+        break;
+      }
+    }
 
-		fclose( in );
-	}
-	else
-	{
-		FILE* in = fopen( MsgFile, "rb" );
+    fclose( in );
+  }
+  else
+  {
+    FILE* in = fopen( MsgFile, "rb" );
 
-		DKIMVerifyOptions vopts = {0};
-		vopts.pfnSelectorCallback = NULL; //SelectorCallback;
+    DKIMVerifyOptions vopts = {0};
+    vopts.pfnSelectorCallback = NULL; //SelectorCallback;
 
-		n = DKIMVerifyInit( &ctxt, &vopts );
+    n = DKIMVerifyInit( &ctxt, &vopts );
 
-		while (1) {
+    while (1) {
 			
 			BufLen = fread( Buffer, 1, sizeof(Buffer), in );
 
@@ -309,18 +306,18 @@ int main(int argc, char* argv[])
 			{
 				break;
 			}
-		}
+    }
 
-		n = DKIMVerifyResults( &ctxt );
+    n = DKIMVerifyResults( &ctxt );
 
-		int nSigCount = 0;
-		DKIMVerifyDetails* pDetails;
-		char szPolicy[512];
+    int nSigCount = 0;
+    DKIMVerifyDetails* pDetails;
+    char szPolicy[512];
 
-		n = DKIMVerifyGetDetails(&ctxt, &nSigCount, &pDetails, szPolicy );
+    n = DKIMVerifyGetDetails(&ctxt, &nSigCount, &pDetails, szPolicy );
 
-		for ( int i = 0; i < nSigCount; i++)
-		{
+    for ( int i = 0; i < nSigCount; i++)
+    {
 			printf( "Signature #%d: ", i + 1 );
 
 			if( pDetails[i].nResult >= 0 )
@@ -333,9 +330,8 @@ int main(int argc, char* argv[])
 //			printf(" (Code %i)\n", e);
 			printf(" %i\n", e);
 			}
-		}
-		DKIMVerifyFree( &ctxt );
-	}
-
+    }
+    DKIMVerifyFree( &ctxt );
+  }
   return 0;
 }

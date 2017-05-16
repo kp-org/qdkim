@@ -3,8 +3,8 @@
 QMAILDIR=`head -1 conf-home`
 
 # get user and group id's
-GRPS=`ls -g $QMAILDIR/bin/qmail-send | awk '{ print $3; }'`
-USRR=`ls -lG $QMAILDIR/bin/qmail-remote | awk '{ print $3; }'`
+GRPS=`ls -l $QMAILDIR/bin/qmail-send | awk '{ print $4; }'`
+USRR=`ls -l $QMAILDIR/queue/lock/tcpto | awk '{ print $3; }'`
 
 cp mkdkimkey qmail-sdkim qmail-vdkim   "$QMAILDIR/bin"
 chown root."$GRPS" "$QMAILDIR/bin/mkdkimkey"

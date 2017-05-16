@@ -4,7 +4,7 @@ VERSION=
 CFLAGS = -c -DVERSION=\"${VERSION}\"
 LFLAGS =
 LIBS   = -lcrypto
-QHDRS  = -I../../qlibs/include
+QHDRS  = -IQLIBDIR/include
 
 SRCS = dkim.cpp dns.cpp dkimbase.cpp dkimsign.cpp dkimverify.cpp
 OBJS = $(SRCS:.cpp=.o)
@@ -17,6 +17,7 @@ all: libqdkim qdkimcrlf mkdkimkey qmail-sdkim qmail-vdkim
 clean:
 	@echo -n Cleaning up ...
 	@rm -f *.o *.a *.tmp libqdkim qdkimcrlf Makefile qdkim.conf
+	@rm -f conf-qlibs conf-home
 	@rm -f mkdkimkey qmail-sdkim qmail-vdkim *.8 qdkim.conf.5
 	@echo " done!"
 

@@ -1,30 +1,34 @@
 #!/bin/sh
 #********************************************************************************
-#
+# use qlibs with qdkim
 
-LIBDIR=./../../qlibs
-LIBS="pathexec.o buffer.a env.a errmsg.a fd.a qstring.a sig.a stralloc.a time.a"
+[ -f conf-qlibs ] && QLIBDIR=`head -1 conf-qlibs`
+[ "$QLIBDIR" ] || QLIBDIR="../qlibs"    # 
+
+# define which libs are required
+QLIBS="pathexec.o buffer.a env.a errmsg.a fd.a qstring.a sig.a stralloc.a time.a"
 
 error() { echo "Couldn't find qlibs. Aborting!"; exit; }
 
 build() {
+  cd $QLIBDIR
   make clean
   make check
   make libs
+  cd $OLDPWD
 }
 
-[ -d "$LIBDIR" ] || error
+[ -d "$QLIBDIR" ] || error
 
-cd $LIBDIR
-for L in $LIBS ; do [ -f "$L" ] || build ; done
-cd $OLDPWD
+# check for pre-compiled libs and if one fails, rebuild all
+for L in $QLIBS ; do [ -f "$QLIBDIR/$L" ] || build ; done
 
-cp $LIBDIR/pathexec.o pathexec.o
-cp $LIBDIR/buffer.a   buffer.a
-cp $LIBDIR/env.a      env.a
-cp $LIBDIR/errmsg.a   errmsg.a
-cp $LIBDIR/fd.a       fd.a
-cp $LIBDIR/qstring.a  qstring.a
-cp $LIBDIR/sig.a      sig.a
-cp $LIBDIR/stralloc.a stralloc.a
-cp $LIBDIR/time.a     time.a
+cp $QLIBDIR/pathexec.o pathexec.o
+cp $QLIBDIR/buffer.a   buffer.a
+cp $QLIBDIR/env.a      env.a
+cp $QLIBDIR/errmsg.a   errmsg.a
+cp $QLIBDIR/fd.a       fd.a
+cp $QLIBDIR/qstring.a  qstring.a
+cp $QLIBDIR/sig.a      sig.a
+cp $QLIBDIR/stralloc.a stralloc.a
+cp $QLIBDIR/time.a     time.a

@@ -97,40 +97,40 @@ typedef struct DKIMContext_t
 
 typedef struct DKIMSignOptions_t
 {
-	int nCanon;								// canonization 
-	int nIncludeBodyLengthTag;				// 0 = don't include l= tag, 1 = include l= tag
-	int nIncludeTimeStamp;					// 0 = don't include t= tag, 1 = include t= tag
-	int nIncludeQueryMethod;				// 0 = don't include q= tag, 1 = include q= tag
-	char szSelector[80];					// selector - required
-	char szDomain[256];						// domain - optional - if empty, domain is computed from sender
-	char szIdentity[256];					// for i= tag, if empty tag will not be included in sig
-	unsigned long expireTime;				// for x= tag, if 0 tag will not be included in sig
-	DKIMHEADERCALLBACK pfnHeaderCallback;	// header callback
-	char szRequiredHeaders[256];			// colon-separated list of headers that must be signed
-	int nHash;								// use one of the DKIM_HASH_xx constants here
-											// even if not present in the message
-	int nIncludeCopiedHeaders;				// 0 = don't include z= tag, 1 = include z= tag
-	int nIncludeBodyHash;					// use one of the DKIM_BODYHASH_xx constants here
+  int nCanon;                             // canonization
+  int nIncludeBodyLengthTag;              // 0 = don't include l= tag, 1 = include l= tag
+  int nIncludeTimeStamp;                  // 0 = don't include t= tag, 1 = include t= tag
+  int nIncludeQueryMethod;                // 0 = don't include q= tag, 1 = include q= tag
+  char szSelector[80];                    // selector - required
+  char szDomain[256];                     // domain - optional - if empty, domain is computed from sender
+  char szIdentity[256];                   // for i= tag, if empty tag will not be included in sig
+  unsigned long expireTime;               // for x= tag, if 0 tag will not be included in sig
+  DKIMHEADERCALLBACK pfnHeaderCallback;   // header callback
+  char szRequiredHeaders[256];            // colon-separated list of headers that must be signed
+  int nHash;                              // use one of the DKIM_HASH_xx constants here
+                                          // even if not present in the message
+  int nIncludeCopiedHeaders;              // 0 = don't include z= tag, 1 = include z= tag
+  int nIncludeBodyHash;                   // use one of the DKIM_BODYHASH_xx constants here
 } DKIMSignOptions;
 
 typedef struct DKIMVerifyOptions_t
 {
-	DKIMDNSCALLBACK pfnSelectorCallback;	// selector record callback
-	DKIMDNSCALLBACK pfnPracticesCallback;	// ADSP record callback
-	int nHonorBodyLengthTag;				// 0 = ignore l= tag, 1 = use l= tag to limit the amount of body verified
-	int nCheckPractices;					// 0 = use default (unknown) practices, 1 = request and use author domain signing practices
-	int nSubjectRequired;					// 0 = subject is required to be signed, 1 = not required
-	int nSaveCanonicalizedData;				// 0 = canonicalized data is not saved, 1 = canonicalized data is saved
-	int nAllowUnsignedFromHeaders;			// 0 = From headers not included in the signature are not allowed, 1 = allowed
+  DKIMDNSCALLBACK pfnSelectorCallback;    // selector record callback
+  DKIMDNSCALLBACK pfnPracticesCallback;   // ADSP record callback
+  int nHonorBodyLengthTag;                // 0 = ignore l= tag, 1 = use l= tag to limit the amount of body verified
+  int nCheckPractices;                    // 0 = use default (unknown) practices, 1 = request and use author domain signing practices
+  int nSubjectRequired;                   // 0 = subject is required to be signed, 1 = not required
+  int nSaveCanonicalizedData;             // 0 = canonicalized data is not saved, 1 = canonicalized data is saved
+  int nAllowUnsignedFromHeaders;          // 0 = From headers not included in the signature are not allowed, 1 = allowed
 } DKIMVerifyOptions;
 
 typedef struct DKIMVerifyDetails_t
 {
-	char *szSignature;
-	char *szSignatureDomain;
-	char *szIdentityDomain;
-	char *szCanonicalizedData;
-	int nResult;
+  char *szSignature;
+  char *szSignatureDomain;
+  char *szIdentityDomain;
+  char *szCanonicalizedData;
+  int nResult;
 } DKIMVerifyDetails;
 
 int DKIM_CALL DKIMSignInit( DKIMContext* pSignContext, DKIMSignOptions* pOptions );

@@ -1,19 +1,19 @@
 /*****************************************************************************
-*  Copyright 2005 Alt-N Technologies, Ltd. 
+*  Copyright 2005 Alt-N Technologies, Ltd.
 *
-*  Licensed under the Apache License, Version 2.0 (the "License"); 
-*  you may not use this file except in compliance with the License. 
-*  You may obtain a copy of the License at 
+*  Licensed under the Apache License, Version 2.0 (the "License");
+*  you may not use this file except in compliance with the License.
+*  You may obtain a copy of the License at
 *
-*      http://www.apache.org/licenses/LICENSE-2.0 
+*      http://www.apache.org/licenses/LICENSE-2.0
 *
-*  This code incorporates intellectual property owned by Yahoo! and licensed 
+*  This code incorporates intellectual property owned by Yahoo! and licensed
 *  pursuant to the Yahoo! DomainKeys Patent License Agreement.
 *
-*  Unless required by applicable law or agreed to in writing, software 
-*  distributed under the License is distributed on an "AS IS" BASIS, 
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-*  See the License for the specific language governing permissions and 
+*  Unless required by applicable law or agreed to in writing, software
+*  distributed under the License is distributed on an "AS IS" BASIS,
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*  See the License for the specific language governing permissions and
 *  limitations under the License.
 *
 *****************************************************************************/
@@ -51,38 +51,28 @@ static void* ValidateContext( DKIMContext* pContext, bool bSign )
 
 int DKIM_CALL DKIMSignInit( DKIMContext* pSignContext, DKIMSignOptions* pOptions )
 {
-	int nRet = DKIM_OUT_OF_MEMORY;
+  int nRet = DKIM_OUT_OF_MEMORY;
 
-	CDKIMSign* pSign = new CDKIMSign;
+  CDKIMSign* pSign = new CDKIMSign;
 
-	if( pSign )
-	{
-		nRet = pSign->Init( pOptions );
+  if( pSign )
+  {
+    nRet = pSign->Init( pOptions );
+    if( nRet != DKIM_SUCCESS )
+      delete pSign;
+  }
 
-		if( nRet != DKIM_SUCCESS )
-			delete pSign;
-	}
-
-	if( nRet == DKIM_SUCCESS )
-	{
-		InitContext( pSignContext, true, pSign );
-	}
-
-	return nRet;
+  if( nRet == DKIM_SUCCESS ) { InitContext( pSignContext, true, pSign ); }
+  return nRet;
 }
-
 
 int DKIM_CALL DKIMSignProcess( DKIMContext* pSignContext, char* szBuffer, int nBufLength )
 {
-	CDKIMSign* pSign = (CDKIMSign*)ValidateContext( pSignContext, true );
+  CDKIMSign* pSign = (CDKIMSign*)ValidateContext( pSignContext, true );
 
-	if( pSign )
-	{
-		return pSign->Process( szBuffer, nBufLength, false );
-	}
-	return DKIM_INVALID_CONTEXT;
+  if( pSign ) { return pSign->Process( szBuffer, nBufLength, false ); }
+  return DKIM_INVALID_CONTEXT;
 }
-
 
 /*
 int DKIM_CALL DKIMSignGetSig( DKIMContext* pSignContext, char* szPrivKey, char* szSignature, int nSigLength )
@@ -101,7 +91,7 @@ int DKIM_CALL DKIMSignGetSig2( DKIMContext* pSignContext, char* szPrivKey, char*
   CDKIMSign* pSign = (CDKIMSign*)ValidateContext( pSignContext, true );
 
   if( pSign ) { return pSign->GetSig2( szPrivKey, pszSignature ); }
-    return DKIM_INVALID_CONTEXT;
+  return DKIM_INVALID_CONTEXT;
 }
 
 
@@ -156,9 +146,7 @@ int DKIM_CALL DKIMVerifyResults( DKIMContext* pVerifyContext )
 {
   CDKIMVerify* pVerify = (CDKIMVerify*)ValidateContext( pVerifyContext, false );
 
-  if( pVerify ) {
-    return pVerify->GetResults();
-  }
+  if( pVerify ) { return pVerify->GetResults(); }
   return DKIM_INVALID_CONTEXT;
 }
 
@@ -195,36 +183,34 @@ const char* DKIM_CALL DKIMVersion()
 }
 
 static const char* DKIMErrorStrings[-1-DKIM_MAX_ERROR] = {
-	"DKIM_FAIL",
-	"DKIM_BAD_SYNTAX",
-	"DKIM_SIGNATURE_BAD",
-	"DKIM_SIGNATURE_BAD_BUT_TESTING",
-	"DKIM_SIGNATURE_EXPIRED",
-	"DKIM_SELECTOR_INVALID",
-	"DKIM_SELECTOR_GRANULARITY_MISMATCH",
-	"DKIM_SELECTOR_KEY_REVOKED",
-	"DKIM_SELECTOR_DOMAIN_NAME_TOO_LONG",
-	"DKIM_SELECTOR_DNS_TEMP_FAILURE",
-	"DKIM_SELECTOR_DNS_PERM_FAILURE",
-	"DKIM_SELECTOR_PUBLIC_KEY_INVALID",
-	"DKIM_NO_SIGNATURES",
-	"DKIM_NO_VALID_SIGNATURES",
-	"DKIM_BODY_HASH_MISMATCH",
-	"DKIM_SELECTOR_ALGORITHM_MISMATCH",
-	"DKIM_STAT_INCOMPAT",
-	"DKIM_UNSIGNED_FROM",
-	"DKIM_OUT_OF_MEMORY",
-	"DKIM_INVALID_CONTEXT",
-	"DKIM_NO_SENDER",
-	"DKIM_BAD_PRIVATE_KEY",
-	"DKIM_BUFFER_TOO_SMALL",
+  "DKIM_FAIL",
+  "DKIM_BAD_SYNTAX",
+  "DKIM_SIGNATURE_BAD",
+  "DKIM_SIGNATURE_BAD_BUT_TESTING",
+  "DKIM_SIGNATURE_EXPIRED",
+  "DKIM_SELECTOR_INVALID",
+  "DKIM_SELECTOR_GRANULARITY_MISMATCH",
+  "DKIM_SELECTOR_KEY_REVOKED",
+  "DKIM_SELECTOR_DOMAIN_NAME_TOO_LONG",
+  "DKIM_SELECTOR_DNS_TEMP_FAILURE",
+  "DKIM_SELECTOR_DNS_PERM_FAILURE",
+  "DKIM_SELECTOR_PUBLIC_KEY_INVALID",
+  "DKIM_NO_SIGNATURES",
+  "DKIM_NO_VALID_SIGNATURES",
+  "DKIM_BODY_HASH_MISMATCH",
+  "DKIM_SELECTOR_ALGORITHM_MISMATCH",
+  "DKIM_STAT_INCOMPAT",
+  "DKIM_UNSIGNED_FROM",
+  "DKIM_OUT_OF_MEMORY",
+  "DKIM_INVALID_CONTEXT",
+  "DKIM_NO_SENDER",
+  "DKIM_BAD_PRIVATE_KEY",
+  "DKIM_BUFFER_TOO_SMALL",
 };
 
-
-const char* DKIM_CALL DKIMGetErrorString( int ErrorCode )
-{
-	if (ErrorCode >= 0 || ErrorCode <= DKIM_MAX_ERROR)
-		return "Unknown";
-	else
-		return DKIMErrorStrings[-1-ErrorCode];
+const char* DKIM_CALL DKIMGetErrorString( int ErrorCode ) {
+  if (ErrorCode >= 0 || ErrorCode <= DKIM_MAX_ERROR)
+    return "Unknown";
+  else
+    return DKIMErrorStrings[-1-ErrorCode];
 }
