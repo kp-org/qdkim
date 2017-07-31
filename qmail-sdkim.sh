@@ -91,6 +91,6 @@ if [ -f "$DKSIGN" ] ; then
    LogMsg="created DKIM signature for $2 ($DOMAIN)" ; DoLog
    exit $EC
  else                  # no domainkey found for (sub)domain
-   LogMsg"No DKIM key found for $2" ; DoLog
+   LogMsg="No DKIM key found for $2" ; DoLog
    DoSend "$@"
 fi

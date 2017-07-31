@@ -1,3 +1,21 @@
+commit e6893225686735c31f71624d7b7cf2984c7bcc84
+Author: Kai Peter <kp@openqmail.org>
+Date:   Tue May 16 18:26:11 2017 +0200
+
+    improved configure and build process
+
+commit e14059ae5a2ae3333909dd5b124001fcdfc32d81
+Author: Kai Peter <kp@openqmail.org>
+Date:   Tue May 16 16:24:59 2017 +0200
+
+    mkdkimkey: get user/group flexible
+
+commit c9c450f7acc8bca75e88c8be54f186360d8cfed0
+Author: Kai Peter <kp@openqmail.org>
+Date:   Tue May 16 15:40:55 2017 +0200
+
+    qmail-vdkim: upped to version 0.55, typo in man page
+
 commit f0246dee95471079078bc0cb9b1231ab7df20dab
 Author: Kai Peter <kp@openqmail.org>
 Date:   Sat May 13 00:02:48 2017 +0200

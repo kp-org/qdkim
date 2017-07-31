@@ -1,4 +1,5 @@
 - handle config directory 'etc' <--> 'control' for backwards compat
+- make keysize configurable (mkdkimkey)
 
 - add info about access rights
 

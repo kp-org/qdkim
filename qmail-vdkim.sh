@@ -40,12 +40,16 @@ DONEBY="$HOSTNAME"  # doesn't confirm with RfC6376 exatily
 DOMAIN="unknown"    # initialize
 VALID="fail"        # default assumption
 inMsg=`mktemp -p "$TMPDIR" -t vdkim.XXXXXXXXXXXXXXXXXXX`
+if [ ! -f "$inMsg" ] ; then
+  LogMsg="Couln't create temporary file!"
+  DoLog ; $DKQUEUE "$@" ; exit 0
+fi
 cat - >"$inMsg"     # save the message
 
 # check for header 'DKIM-Signature'
 cat $inMsg | grep "^DKIM-Signature" 2>&1 >/dev/null
 if [ $? -ne 0 ] ; then
-  LogMsg="qmail-vdkim: no DKIM signatures found." ; DoLog
+  LogMsg="No DKIM signatures found." ; DoLog
   cat "$inMsg" | $DKQUEUE "$@" ; rm -f "$inMsg" ; exit 0 ; fi
 
 tmpMsg=`mktemp -p "$TMPDIR" -t vdkim.XXXXXXXXXXXXXXXXXXX`
@@ -70,6 +74,7 @@ printf "X-Authentication-Results: $DOMAIN; dkim=$VALID; $DONEBY\n" | \
 # concatenate new header field (DKIM-Verify) and message
 cat "$HEADER" "$inMsg" | "$DKQUEUE" "$@"
 EC=$?
-LogMsg="qmail-vdkim: Verify DKIM for $DOMAIN: $VALID" ; DoLog
+#LogMsg="qmail-vdkim: Verify DKIM for $DOMAIN: $VALID" ; DoLog
+LogMsg="Verify DKIM for $DOMAIN: $VALID" ; DoLog
 DelTmpFiles
 exit $EC

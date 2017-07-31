@@ -24,8 +24,9 @@ clean:
 install: setup
 
 setup:
-	echo Installing qdkim
-	./install
+	@echo Installing qdkim
+	@./install
+	@echo ... done!
 
 libqdkim.a: $(OBJS)
 	rm -f libqdkim.a
