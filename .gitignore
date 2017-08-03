@@ -16,3 +16,5 @@ CHANGELOG.old
 Makefile
 conf-home
 conf-qlibs
+
+mkchangelog

@@ -41,13 +41,13 @@ DOMAIN="unknown"    # initialize
 VALID="fail"        # default assumption
 inMsg=`mktemp -p "$TMPDIR" -t vdkim.XXXXXXXXXXXXXXXXXXX`
 if [ ! -f "$inMsg" ] ; then
-  LogMsg="Couln't create temporary file!"
+  LogMsg="Couldn't create temporary file! DKIM verification aborted!"
   DoLog ; $DKQUEUE "$@" ; exit 0
 fi
 cat - >"$inMsg"     # save the message
 
 # check for header 'DKIM-Signature'
-cat $inMsg | grep "^DKIM-Signature" 2>&1 >/dev/null
+cat "$inMsg" | grep "^DKIM-Signature" 2>&1 >/dev/null
 if [ $? -ne 0 ] ; then
   LogMsg="No DKIM signatures found." ; DoLog
   cat "$inMsg" | $DKQUEUE "$@" ; rm -f "$inMsg" ; exit 0 ; fi
@@ -58,23 +58,23 @@ HEADER=`mktemp -p "$TMPDIR" -t vdkim.XXXXXXXXXXXXXXXXXXX`
 QMAILHOME/bin/qdkimcrlf cat "$inMsg" >"$tmpMsg"
 
 # redirection of stderr and pipe to /dev/null is a MUST!
-$DKLIB -v $tmpMsg | grep 'Signature #[0-9]: Success' 2>&1 >/dev/null
+$DKLIB -v "$tmpMsg" | grep 'Signature #[0-9]: Success' 2>&1 >/dev/null
 if [ $? -eq 0 ] ; then VALID="pass (ok)" ; fi
 
 # get the message body - just a coding reference here :))
 #cat $tmpMsg | sed 's/\r//' | sed '1,/^$/d' > $BODY
-# get the message headers
-cat $tmpMsg | sed 's/\r//' | sed '/^$/q' | \
-    sed -e :a -e '/^\n*$/{$d;N;ba' -e '}' > $HEADER
+# get the message headers --> not needed!
+#cat "$tmpMsg" | sed 's/\r//' | sed '/^$/q' | \
+#    sed -e :a -e '/^\n*$/{$d;N;ba' -e '}' > "$HEADER"
+
 # get domain from "From:" header field
-DOMAIN=$(cat $HEADER | grep ^[Ff]rom: | tr -d '\15' | cut -d@ -f2 | cut -d\> -f1)
+DOMAIN=$(cat $inMsg | grep ^[Ff]rom: | tr -d '\15' | cut -d@ -f2 | cut -d\> -f1)
 # prepare new header field(s)
 printf "X-Authentication-Results: $DOMAIN; dkim=$VALID; $DONEBY\n" | \
-       fmt -w 78 -t > $HEADER
+       fmt -w 78 -t > "$HEADER"
 # concatenate new header field (DKIM-Verify) and message
 cat "$HEADER" "$inMsg" | "$DKQUEUE" "$@"
 EC=$?
-#LogMsg="qmail-vdkim: Verify DKIM for $DOMAIN: $VALID" ; DoLog
 LogMsg="Verify DKIM for $DOMAIN: $VALID" ; DoLog
 DelTmpFiles
 exit $EC

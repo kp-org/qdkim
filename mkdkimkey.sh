@@ -65,7 +65,10 @@ if [ ! $PRINT ] ; then
   $OPENSSL rsa -in $DKDIR/$DOMAIN/rsa.private_$SELECTOR \
                -out $DKDIR/$DOMAIN/rsa.public_$SELECTOR -pubout -outform PEM
 
-  ln -sf $DKDIR/$DOMAIN/rsa.private_$SELECTOR $DKDIR/$DOMAIN/default
+  cd "$DKDIR/$DOMAIN"
+  ln -sf rsa.private_$SELECTOR default
+  cd "$OLDPWD"
+#  ln -sf $DKDIR/$DOMAIN/rsa.private_$SELECTOR $DKDIR/$DOMAIN/default
   # set access rights
   chmod 0711 $DKDIR
   chmod 0700 $DKDIR/$DOMAIN

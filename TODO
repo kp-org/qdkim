@@ -17,3 +17,4 @@
 - compile with clang++ (freebsd)
 - add WHO to libqdkim.cpp
 - libqdkim: improve output for verify (see RfC, A.3)
+- make DEL_TMP_FILES a config option for qmail-vdkim

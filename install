@@ -25,5 +25,5 @@ chown -R root.root "$QMAILDIR/man"
 
 # tmp
 mkdir -p "$QMAILDIR/tmp"
-chown root.nofiles "$QMAILDIR/tmp"
-chmod 0770 "$QMAILDIR/tmp"
+chown root.qmail "$QMAILDIR/tmp"
+chmod 1777 "$QMAILDIR/tmp"     # important, cause we have multiple users
