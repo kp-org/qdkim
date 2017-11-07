@@ -3,7 +3,7 @@
 #                                                                               #
 #  Author: Kai Peter, ©2013-©2017 (kp@openqmail.org)                            #
 #          (based on work by Joerg Backschues & Kyle Wheeler)                   #
-# Version: 0.57                                                                 #
+# Version: 0.58                                                                 #
 # Licence: See LICENSE file                                                     #
 #                                                                               #
 # Description: Add DKIM signature to outgoing messages                          #
@@ -82,9 +82,8 @@ if [ -f "$DKSIGN" ] ; then
    # this works (in most cases) fine (even with libdkim-1.0.21):
    $DKLIB -y`cat $FLDR/selector` -d"$DOMAIN" -i"$SENDER" \
           -l -b2 -ct -z2 -s "$InMsg" "$DKSIGN" "$OutMsg" 2>/dev/null
-   # remove 'CR' and handover to the real qmail-remote
-#   (cat "$OutMsg" | tr -d '\015') | DoSend "$@"
-   cat "$OutMsg" | DoSend "$@"
+   # remove 'CR' and handover to (real) qmail-remote (do 'tr -d' in any case!!!)
+   (cat "$OutMsg" | tr -d '\015') | DoSend "$@"
    EC=$?
    DelTmpFiles
    # write to system log

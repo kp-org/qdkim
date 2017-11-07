@@ -1,8 +1,10 @@
 ************************ H E A D E R *************************
 CHANGELOG created from git - do not change these hesder lines!
-Last commit: 434ea98fc646b4791addce28592617ba28ddbcf5
+Last commit: 3e126fb423f3dc99cd62f4f5b6cc052da4631c84
 ********************* E N D  H E A D E R *********************
 
+20170803:
+    - improved error robustness
 20170731:
     - improved error handling
 20170516:
@@ -13,25 +15,23 @@ Last commit: 434ea98fc646b4791addce28592617ba28ddbcf5
     - removed dependancy 'unix2dos'
 20170512:
     - dkimsign: corrected strings for c= tag
-20170511
+20170511:
     - cleanup dns.h
     - upped version to 20170511-beta1
-Merge: e7b3213 c3a5226
     - Merge pull request #2 from kp-org/dev
     - merge of 'qdkim' into 'xdkim'
     - clean-up, docs
     - added libqdkim code
     - added config file
-20170510
+20170510:
     - qmail-sdkim: removed obsolete code, updated man page
     - renamed 'mkdomainkey' to 'mkdkimkey', improved code and man page
-20170507
+20170507:
     - qmail-sdkim: more failsafe, usage of config file
-20170505
+20170505:
     - added Makefile and switched to 'make' build process
     - typo in mkdomainkey.8
-Merge: 939df0d 4cac84d
-20160219
+20160219:
     - Merge pull request #1 from kp-org/dev
     - first merge to master
     - initial commit
@@ -39,34 +39,33 @@ Merge: 939df0d 4cac84d
     - Create README.md
 
 Changes: qmail-xdkim ****************************************
-
 20170219: created git repo
 20160218: qmail-vdkim-0.42-beta
-          - added variable XDKIM
-          - created man page qmail-vdkim.8
+    - added variable XDKIM
+    - created man page qmail-vdkim.8
 20160211: qmail-sdkim-0.44
-          - added variable XDKIM
+    - added variable XDKIM
 20160210: qmail-sdkim-0.43
-          - added PARENTLEVEL for third and fourth level domains
+    - added PARENTLEVEL for third and fourth level domains
 
 Changes: libdkim/xdkim **************************************
-
 20160426:
-  - changed license to ISC
+    - changed license to ISC
 20160211:
-  - removed unused DKIMSignGetSig function (commented out)
-  - added man page
-  - deleted WIN32 stuff
-20160210: converted all files to UNIX format
-  - added configure, Makefile.in
-  - removed '#ifdef WIN32' (commented out)
-  - changed default selector to "default"
-  - unset "bardenhagen" identity and domain
+    - removed unused DKIMSignGetSig function (commented out)
+    - added man page
+    - deleted WIN32 stuff
+20160210:
+    - converted all files to UNIX format
+    - added configure, Makefile.in
+    - removed '#ifdef WIN32' (commented out)
+    - changed default selector to "default"
+    - unset "bardenhagen" identity and domain
 20160208:
-  - disabled requirement 'subject' (changed options to 1)
+    - disabled requirement 'subject' (changed options to 1)
 20160205:
-  - strtok_r.patch
-  - fix_warnings.patch
-  - dos2unix Makefile
-  - added '-lresolv' to LDFLAGS
-  - applied corrected usage patch
+    - strtok_r.patch
+    - fix_warnings.patch
+    - dos2unix Makefile
+    - added '-lresolv' to LDFLAGS
+    - applied corrected usage patch
