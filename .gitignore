@@ -11,10 +11,6 @@ mkdkimkey
 qdkim.conf
 libqdkim
 qdkimcrlf
-mkchangelog
-CHANGELOG.old
 Makefile
 conf-home
 conf-qlibs
-
-mkchangelog

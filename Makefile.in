@@ -1,10 +1,11 @@
 # Makefile for qdkim
 #
-VERSION=
-CFLAGS = -c -DVERSION=\"${VERSION}\"
-LFLAGS =
-LIBS   = -lcrypto
-QHDRS  = -IQLIBDIR/include
+VERSION =
+CFLAGS  = -c -IQLIBDIR/include -DVERSION=\"${VERSION}\"
+CFLAGS += -Wno-narrowing
+LFLAGS  =
+LFLAGS += -LQLIBDIR -lqlibs
+LFLAGS += -lcrypto
 
 SRCS = dkim.cpp dns.cpp dkimbase.cpp dkimsign.cpp dkimverify.cpp
 OBJS = $(SRCS:.cpp=.o)
@@ -29,12 +30,12 @@ setup:
 	@echo ... done!
 
 libqdkim.a: $(OBJS)
-	rm -f libqdkim.a
+	@rm -f libqdkim.a
 	ar cr libqdkim.a $(OBJS)
 	ranlib libqdkim.a
 
 libqdkim: libqdkim.a libqdkim.o
-	g++ -o libqdkim $(LFLAGS) -L . libqdkim.o $(LIBS) libqdkim.a
+	g++ -o libqdkim $(LFLAGS) libqdkim.o libqdkim.a
 
 libqdkim.o: libqdkim.cpp
 
@@ -42,10 +43,8 @@ libqdkim.o: libqdkim.cpp
 	g++ $(CFLAGS) $<
 
 qdkimcrlf:
-	@./qlibs.sh
-	cc -O2 $(QHDRS) -Wall -c qdkimcrlf.c
-	cc -s qdkimcrlf.o pathexec.o env.a errmsg.a fd.a \
-	qstring.a time.a buffer.a sig.a stralloc.a -o $@
+	cc -O2 $(CFLAGS) -Wall -c qdkimcrlf.c
+	cc -s -o qdkimcrlf qdkimcrlf.o $(LFLAGS)
 
 mkdkimkey:
 	@echo creating $@

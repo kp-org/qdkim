@@ -1,8 +1,10 @@
 ************************ H E A D E R *************************
 CHANGELOG created from git - do not change these hesder lines!
-Last commit: 3e126fb423f3dc99cd62f4f5b6cc052da4631c84
+Last commit: 8b82da8aad746206e8c850b19d190b1589c94338
 ********************* E N D  H E A D E R *********************
 
+20171107:
+    - re-activated removal of CR's (tr -d '015') after glibc update (2.23 -> 2.25)
 20170803:
     - improved error robustness
 20170731:

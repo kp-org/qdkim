@@ -132,15 +132,15 @@ int main(int argc,char **argv,char **envp)
   int piout[2];
 
   if (argc < 2)
-    err_sys_plus(EINVAL,"usage: fixcrio program [ arg ... ]");
+    errint(EINVAL,"usage: fixcrio program [ arg ... ]");
   if (pipe(piin) == -1)
-    err_sys_plus(errno,"unable to create pipe");
+    errint(errno,"unable to create pipe");
   if (pipe(piout) == -1)
-    err_sys_plus(errno,"unable to create pipe");
+    errint(errno,"unable to create pipe");
 
   switch(fork()) {
     case -1:
-      err_sys_plus(errno,"unable to fork");
+      errint(errno,"unable to fork");
     case 0:
       sig_ignore(sig_pipe);
       close(piin[0]);
@@ -151,11 +151,11 @@ int main(int argc,char **argv,char **envp)
   close(piin[1]);
   close(piout[0]);
   if (fd_move(0,piin[0]) == -1)
-    err_sys_plus(errno,"unable to move descriptors");
+    errint(errno,"unable to move descriptors");
   if (fd_move(1,piout[1]) == -1)
-    err_sys_plus(errno,"unable to move descriptors");
+    errint(errno,"unable to move descriptors");
 
   pathexec_run(argv[1],argv + 1,envp);
-  err_sys(errno);
+  errsys(errno);
   return(0);
 }
