@@ -3,7 +3,7 @@
 
 
 # set the *qmail install directory here in case the auto detection fails
-QMAILDIR=/var/qmail
+QMAILDIR=/usr/local/qmail
 
 # !!! REQUIRED !!!  Usually the 'qlibs' are included in the openqmail package, so
 # by default there is no need to change it.

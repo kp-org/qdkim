@@ -2,7 +2,7 @@
 # Create/Handle domainkeys for openqmail/eQmail/(net)qmail and derivatives      #
 #                                                                               #
 #  Author: Kai Peter (parts taken from Joerg Backschues), ©2014                 #
-# Version: 0.31                                                                 #
+# Version: 0.32                                                                 #
 # Licence: This program is  Copyright(C) ©2015 Kai Peter.  It can be copied and #
 #          modified according to the GNU GENERAL PUBLIC LICENSE (GPL) Version 2 #
 #          or a later version. This software comes without any warranty.        #
@@ -73,13 +73,13 @@ if [ ! $PRINT ] ; then
   chmod 0711 $DKDIR
   chmod 0700 $DKDIR/$DOMAIN
   chmod 0600 $DKDIR/$DOMAIN/*
-  USR=`ls -l /usr/local/qmail/queue/lock/tcpto | awk '{ print $3 }'`
-  GRP=`ls -l /usr/local/qmail/queue/lock/tcpto | awk '{ print $4 }'`
-#  chown -R qmailr:qmail $DKDIR
+#QUEUEDIR=`qmail-print | grep 'default queue location:'`
+  USR=`ls -l QMAILHOME/var/queue/lock/tcpto | awk '{ print $3 }'`
+  GRP=`ls -l QMAILHOME/var/queue/lock/tcpto | awk '{ print $4 }'`
   chown -R $USR:$GRP $DKDIR
  else
   test -f $DKDIR/$DOMAIN/rsa.public_$SELECTOR || \
   (errString="does not exist" && showError)
 fi
-showTXT
+[ "$?" = 0 ] && showTXT
 exit 0

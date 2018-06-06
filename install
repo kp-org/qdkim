@@ -4,7 +4,7 @@ QMAILDIR=`head -1 conf-home`
 
 # get user and group id's
 GRPS=`ls -l $QMAILDIR/bin/qmail-send | awk '{ print $4; }'`
-USRR=`ls -l $QMAILDIR/queue/lock/tcpto | awk '{ print $3; }'`
+USRR=`ls -l $QMAILDIR/var/queue/lock/tcpto | awk '{ print $3; }'`
 
 cp mkdkimkey qmail-sdkim qmail-vdkim   "$QMAILDIR/bin"
 chown root."$GRPS" "$QMAILDIR/bin/mkdkimkey"
@@ -27,3 +27,8 @@ chown -R root.root "$QMAILDIR/man"
 mkdir -p "$QMAILDIR/tmp"
 chown root.qmail "$QMAILDIR/tmp"
 chmod 1777 "$QMAILDIR/tmp"     # important, cause we have multiple users
+
+# folder domainkeys
+mkdir -p "$QMAILDIR/etc/domainkeys"
+chown qmailr.qmail "$QMAILDIR/etc/domainkeys"
+chmod 0711 "$QMAILDIR/etc/domainkeys"

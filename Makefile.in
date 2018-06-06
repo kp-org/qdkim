@@ -35,7 +35,8 @@ libqdkim.a: $(OBJS)
 	ranlib libqdkim.a
 
 libqdkim: libqdkim.a libqdkim.o
-	g++ -o libqdkim $(LFLAGS) libqdkim.o libqdkim.a
+	g++ -o libqdkim libqdkim.o $(LFLAGS) -L . -lqdkim
+#	g++ -o libqdkim $(LFLAGS) libqdkim.o libqdkim.a
 
 libqdkim.o: libqdkim.cpp
 
